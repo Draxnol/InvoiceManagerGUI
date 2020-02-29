@@ -90,8 +90,8 @@
                     </rowConstraints>
                      <children>
                         <Label prefHeight="17.0" prefWidth="120.0" text="Select Contact:" />
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Select Contact" GridPane.columnIndex="1" />
-                        <Label prefHeight="51.0" prefWidth="255.0" text="No contact selected" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" />
+                        <Button fx:id="btnSelectContact" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Select Contact" GridPane.columnIndex="1" />
+                        <Label fx:id="labelSelectedContact" prefHeight="51.0" prefWidth="255.0" text="No contact selected" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" />
                      </children>
                   </GridPane>
                   <Separator layoutX="43.0" layoutY="139.0" prefWidth="200.0" />
@@ -105,11 +105,11 @@
                   </Label>
                   <VBox layoutX="10.0" layoutY="169.0" prefHeight="362.0" prefWidth="266.0">
                      <children>
-                        <ListView prefHeight="334.0" prefWidth="266.0" />
+                        <ListView fx:id="listViewInvoiceTable" prefHeight="334.0" prefWidth="266.0" />
                         <HBox prefHeight="23.0" prefWidth="266.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Button" />
-                              <Button mnemonicParsing="false" text="Button" />
+                              <Button fx:id="btnAddInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="Add" />
+                              <Button fx:id="btnDeleteInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Delete" />
                            </children>
                         </HBox>
                      </children>
@@ -121,7 +121,7 @@
             <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" textFill="$x2" wrapText="false" />
                   <AnchorPane layoutY="276.0" prefHeight="226.0" prefWidth="510.0">
                      <children>
-                        <TableView layoutX="-11.0" layoutY="8.0" prefHeight="226.0" prefWidth="510.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="tableViewInvoiceTable" layoutX="-11.0" layoutY="8.0" prefHeight="226.0" prefWidth="510.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
                             <TableColumn prefWidth="75.0" text="C1" />
                             <TableColumn prefWidth="75.0" text="C2" />
@@ -155,15 +155,17 @@
                     </rowConstraints>
                      <children>
                         <Label text="Billing payable" GridPane.columnSpan="3" />
-                        <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3" />
+                        <TextArea fx:id="textFieldBillingPayable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3" />
                         <Label text="Bill to" GridPane.columnIndex="4" />
-                        <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3" />
-                        <DatePicker GridPane.columnIndex="8" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+                        <TextArea fx:id="textFieldBillTo" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3" />
+                        <DatePicker fx:id="dateFieldDate" GridPane.columnIndex="8" GridPane.columnSpan="3" GridPane.rowIndex="1" />
                         <Label text="Date" GridPane.columnIndex="8" />
                         <Label text="Invoice Number" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                        <TextField editable="false" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                        <TextField fx:id="textFieldInvoiceNumber" editable="false" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
+                  <Button fx:id="btnNewRow" layoutX="510.0" layoutY="301.0" mnemonicParsing="false" text="New Row" />
+                  <Button fx:id="btnDeleteRow" layoutX="510.0" layoutY="336.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Del Row" />
           </children>
         </AnchorPane>
       </items>
