@@ -2,6 +2,8 @@ package draxnol.InvoiceManagerGUI;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -11,6 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class PrimaryController {
 
@@ -70,7 +73,12 @@ public class PrimaryController {
     private Color x4;
 	
     @FXML
-    private void switchToSecondary() throws IOException {
-       System.out.println("");
+    private void openContactManager() throws IOException {
+    	 FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
+    	 Scene ContactManagerScene = new Scene(fxmlLoader.load()); 
+    	 Stage contactStage = new Stage();
+    	 contactStage.setTitle("Contact Manager");
+    	 contactStage.setScene(ContactManagerScene);
+    	 contactStage.show();
     }
 }

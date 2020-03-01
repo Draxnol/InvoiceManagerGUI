@@ -90,7 +90,7 @@
                     </rowConstraints>
                      <children>
                         <Label prefHeight="17.0" prefWidth="120.0" text="Select Contact:" />
-                        <Button fx:id="btnSelectContact" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Select Contact" GridPane.columnIndex="1" />
+                        <Button fx:id="btnSelectContact" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Select Contact" GridPane.columnIndex="1" onAction="#openContactManager"/>
                         <Label fx:id="labelSelectedContact" prefHeight="51.0" prefWidth="255.0" text="No contact selected" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" />
                      </children>
                   </GridPane>
