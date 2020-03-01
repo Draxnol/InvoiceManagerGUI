@@ -90,7 +90,7 @@
                     </rowConstraints>
                      <children>
                         <Label prefHeight="17.0" prefWidth="120.0" text="Select Contact:" />
-                        <Button fx:id="btnSelectContact" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Select Contact" GridPane.columnIndex="1" onAction="#openContactManager"/>
+                        <Button fx:id="btnSelectContact" mnemonicParsing="false" onAction="#openContactManager" prefHeight="25.0" prefWidth="126.0" text="Select Contact" GridPane.columnIndex="1" />
                         <Label fx:id="labelSelectedContact" prefHeight="51.0" prefWidth="255.0" text="No contact selected" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" />
                      </children>
                   </GridPane>
@@ -108,7 +108,10 @@
                         <ListView fx:id="listViewInvoiceTable" prefHeight="334.0" prefWidth="266.0" />
                         <HBox prefHeight="23.0" prefWidth="266.0">
                            <children>
-                              <Button fx:id="btnAddInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="Add" />
+                              <Button fx:id="btnAddInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="Add">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin></Button>
                               <Button fx:id="btnDeleteInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Delete" />
                            </children>
                         </HBox>
@@ -162,10 +165,12 @@
                         <Label text="Date" GridPane.columnIndex="8" />
                         <Label text="Invoice Number" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="2" />
                         <TextField fx:id="textFieldInvoiceNumber" editable="false" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                        <Button fx:id="btnLoadDB" mnemonicParsing="false" onAction="#loadDB" text="Button" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                   <Button fx:id="btnNewRow" layoutX="510.0" layoutY="301.0" mnemonicParsing="false" text="New Row" />
                   <Button fx:id="btnDeleteRow" layoutX="510.0" layoutY="336.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Del Row" />
+                  <Button fx:id="btnSave" layoutX="510.0" layoutY="477.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Save" />
           </children>
         </AnchorPane>
       </items>

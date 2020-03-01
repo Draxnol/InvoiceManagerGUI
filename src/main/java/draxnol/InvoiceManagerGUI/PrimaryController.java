@@ -1,6 +1,8 @@
 package draxnol.InvoiceManagerGUI;
 
 import java.io.IOException;
+
+import draxnol.database.utilDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,68 +19,77 @@ import javafx.stage.Stage;
 
 public class PrimaryController {
 
+	@FXML
+	private Font x1;
 
-    @FXML
-    private Font x1;
+	@FXML
+	private Color x2;
 
-    @FXML
-    private Color x2;
+	@FXML
+	private Button btnSelectContact;
 
-    @FXML
-    private Button btnSelectContact;
+	@FXML
+	private Label labelSelectedContact;
 
-    @FXML
-    private Label labelSelectedContact;
+	@FXML
+	private Font x11;
 
-    @FXML
-    private Font x11;
+	@FXML
+	private Color x21;
 
-    @FXML
-    private Color x21;
+	@FXML
+	private ListView<?> listViewInvoiceTable;
 
-    @FXML
-    private ListView<?> listViewInvoiceTable;
+	@FXML
+	private Button btnAddInvoice;
 
-    @FXML
-    private Button btnAddInvoice;
+	@FXML
+	private Button btnDeleteInvoice;
 
-    @FXML
-    private Button btnDeleteInvoice;
+	@FXML
+	private TableView<?> tableViewInvoiceTable;
 
-    @FXML
-    private TableView<?> tableViewInvoiceTable;
+	@FXML
+	private TextArea textFieldBillingPayable;
 
-    @FXML
-    private TextArea textFieldBillingPayable;
+	@FXML
+	private TextArea textFieldBillTo;
 
-    @FXML
-    private TextArea textFieldBillTo;
+	@FXML
+	private DatePicker dateFieldDate;
 
-    @FXML
-    private DatePicker dateFieldDate;
+	@FXML
+	private TextField textFieldInvoiceNumber;
 
-    @FXML
-    private TextField textFieldInvoiceNumber;
+	@FXML
+	private Button btnNewRow;
 
-    @FXML
-    private Button btnNewRow;
+	@FXML
+	private Button btnDeleteRow;
 
-    @FXML
-    private Button btnDeleteRow;
+	@FXML
+	private Button btnSave;
 
-    @FXML
-    private Font x3;
-
-    @FXML
-    private Color x4;
+	@FXML
+	Button btnLoadDB;
 	
-    @FXML
-    private void openContactManager() throws IOException {
-    	 FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
-    	 Scene ContactManagerScene = new Scene(fxmlLoader.load()); 
-    	 Stage contactStage = new Stage();
-    	 contactStage.setTitle("Contact Manager");
-    	 contactStage.setScene(ContactManagerScene);
-    	 contactStage.show();
-    }
+	@FXML
+	private Font x3;
+
+	@FXML
+	private Color x4;
+
+	@FXML
+	private void openContactManager() throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
+		Scene ContactManagerScene = new Scene(fxmlLoader.load());
+		Stage contactStage = new Stage();
+		contactStage.setTitle("Contact Manager");
+		contactStage.setScene(ContactManagerScene);
+		contactStage.show();
+	}
+	@FXML
+	private void loadDB() {
+		utilDAO.createContactTable();
+	}
 }

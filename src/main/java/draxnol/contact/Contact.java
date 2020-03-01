@@ -143,4 +143,9 @@ public class Contact {
 	public SimpleStringProperty contactEmailAddress() {
 		return contactEmailAddress;
 	}
+
+	public String getContactSummary() {
+		String summaryString = "Contact name " + this.getContactName(); 
+		return summaryString;
+	}
 }
