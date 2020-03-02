@@ -45,4 +45,22 @@ public class ContactDAO {
 		return contacts;
 	}
 
+	public static void insertNewContact(
+			int contactInvoiceCount,
+			String contactName,
+			String contactAlias,
+			String contactBillingAddress) {
+		String sql = "INSERT INTO contacts(\n"
+				+ "contactInvoiceCount"
+				+ "contactName"
+				+ "contactAlias"
+				+ "contactBillingAddress"
+				+ ")VALUES("
+				+ "" + contactName +""
+				+ "" + contactInvoiceCount +""
+				+ "" + contactAlias +""
+				+ "" + contactBillingAddress +""	
+				+ ");" ;
+	}
+	
 }

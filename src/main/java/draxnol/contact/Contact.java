@@ -2,6 +2,7 @@ package draxnol.contact;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 
 public class Contact {
 	private SimpleIntegerProperty contactID;
@@ -13,6 +14,17 @@ public class Contact {
 	private SimpleStringProperty contactBusinessNumber;
 	private SimpleStringProperty contactEmailAddress;
 
+	
+	public Contact(String name) {
+		contactID = new SimpleIntegerProperty();
+		contactInvoiceCount = new SimpleIntegerProperty();
+		contactName = new SimpleStringProperty(name);
+		contactAlias = new SimpleStringProperty();
+		contactBillingAddress = new SimpleStringProperty();
+		contactPhoneNumber = new SimpleStringProperty();
+		contactBusinessNumber = new SimpleStringProperty();
+		contactEmailAddress = new SimpleStringProperty();
+	}
 	public Contact() {
 		contactID = new SimpleIntegerProperty();
 		contactInvoiceCount = new SimpleIntegerProperty();
@@ -148,4 +160,5 @@ public class Contact {
 		String summaryString = "Contact name " + this.getContactName(); 
 		return summaryString;
 	}
+	
 }

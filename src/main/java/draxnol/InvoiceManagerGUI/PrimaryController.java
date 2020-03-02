@@ -71,8 +71,8 @@ public class PrimaryController {
 	private Button btnSave;
 
 	@FXML
-	Button btnLoadDB;
-	
+	private Button btnLoadDB;
+
 	@FXML
 	private Font x3;
 
@@ -88,8 +88,10 @@ public class PrimaryController {
 		contactStage.setScene(ContactManagerScene);
 		contactStage.show();
 	}
+
 	@FXML
 	private void loadDB() {
 		utilDAO.createContactTable();
 	}
+
 }
