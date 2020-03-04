@@ -96,7 +96,21 @@ public class ContactManagerController {
 	}
 
 	@FXML
+	private void deleteContact() {
+		int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
+		Contact selectedContact = contactListView.getItems().get(selectedIndex);
+		try {
+			ContactDAO.deleteContact(selectedContact);
+			contactListView.getItems().remove(selectedIndex);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
 	private void saveContact() {
+		// TODO Input validation
 		int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
 		Contact selectedContact = contactListView.getItems().get(selectedIndex);
 		selectedContact.setContactAlias(textFieldAlias.getText());
@@ -106,22 +120,21 @@ public class ContactManagerController {
 		selectedContact.setContactEmailAddress(textFieldEmail.getText());
 		selectedContact.setContactBusinessNumber(textFieldContactBusinessNumber.getText());
 		selectedContact.setContactBillingAddress(textAreaBillingAddress.getText());
-		if(selectedContact.status == ContactStatus.NEW) {
-			
+		if (selectedContact.status == ContactStatus.NEW) {
+
 			try {
-				
 				selectedContact.status = ContactStatus.CREATED;
 				ContactDAO.insertNewContact(selectedContact);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}else {
+		} else {
 			ContactDAO.updateContact(selectedContact);
 		}
-		
+
 		System.out.println("Updating db");
-		
+
 		try {
 			contactListView.setItems(ContactDAO.loadAllContactsDB());
 		} catch (SQLException e) {

@@ -101,5 +101,22 @@ public class ContactDAO {
 				
 				
 	}
+
+	public static void deleteContact(Contact selectedContact) throws SQLException{
+		String sql = "DELETE FROM contacts WHERE contactID ='"
+				+ selectedContact.getContactID() +
+				"'";
+		
+		try {
+			DatabaseConnection.dbConnect();
+			Statement stmt = DatabaseConnection.connection.createStatement();
+			stmt.execute(sql);			
+			DatabaseConnection.dbDisconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 }
