@@ -5,6 +5,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 
 public class Contact {
+	public enum ContactStatus {
+		NEW,
+		CREATED,
+		UPDATED,
+		OLD
+	}
+	
+	public ContactStatus status;
 	private SimpleIntegerProperty contactID;
 	private SimpleIntegerProperty contactInvoiceCount;
 	private SimpleStringProperty contactName;
@@ -15,16 +23,7 @@ public class Contact {
 	private SimpleStringProperty contactEmailAddress;
 
 	
-	public Contact(String name) {
-		contactID = new SimpleIntegerProperty();
-		contactInvoiceCount = new SimpleIntegerProperty();
-		contactName = new SimpleStringProperty(name);
-		contactAlias = new SimpleStringProperty();
-		contactBillingAddress = new SimpleStringProperty();
-		contactPhoneNumber = new SimpleStringProperty();
-		contactBusinessNumber = new SimpleStringProperty();
-		contactEmailAddress = new SimpleStringProperty();
-	}
+
 	public Contact() {
 		contactID = new SimpleIntegerProperty();
 		contactInvoiceCount = new SimpleIntegerProperty();

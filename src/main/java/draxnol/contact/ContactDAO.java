@@ -1,6 +1,5 @@
 package draxnol.contact;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -50,36 +49,33 @@ public class ContactDAO {
 		return contacts;
 	}
 
-	public static void insertNewContact(
-			int contactInvoiceCount,
-			String contactName,
-			String contactAlias,
-			String contactBillingAddress) {
-		String sql = "INSERT INTO contacts(\n"
-				+ "contactInvoiceCount"
-				+ "contactName"
-				+ "contactAlias"
-				+ "contactBillingAddress"
-				+ ")VALUES("
-				+ "" + contactName +""
-				+ "" + contactInvoiceCount +""
-				+ "" + contactAlias +""
-				+ "" + contactBillingAddress +""	
-				+ ");" ;
+	public static void insertNewContact(Contact contact) throws SQLException {
+		String sql = "INSERT INTO contacts(contactInvoiceCount,contactName,contactAlias,contactBillingAddress,contactBusinessNumber,contactPhoneNumber,contactEmailAddress) VALUES("
+				+ "" + contact.getContactInvoiceCount()
+				+ ",'" + contact.getContactName()
+				+ "','" + contact.getContactAlias()
+				+ "','" + contact.getContactBillingAddress()
+				+ "','" + contact.getContactBusinessNumber()
+				+ "','" + contact.getContactPhoneNumber()
+				+ "','" + contact.getContactEmailAddress()
+				+ "')"
+				+ ";" ;
+		System.out.println(sql);
+		try {
+			DatabaseConnection.dbConnect();
+			Statement stmt = DatabaseConnection.connection.createStatement();
+			stmt.execute(sql);			
+			DatabaseConnection.dbDisconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	
 	}
 
 	public static void updateContact(Contact contact) {
-	
-//		System.out.println(contact.toString());
-//		String sql = "UPDATE contacts "
-//				+ "SET contactInvoiceCount = ?, "
-//				+ "contactName = ?, "
-//				+ "contactAlias = ?, "
-//				+ "contactBillingAddress= ?, "
-//				+ "contactBusinessNumber = ?, "
-//				+ "contactPhoneNumber = ? "
-//				+ "WHERE contactID = ?; ";
-	
+	//TODO Use prepared statements instead.
 		
 		String sql = "UPDATE contacts "
 				+ "Set contactInvoiceCount = " + contact.getContactInvoiceCount()
@@ -95,19 +91,7 @@ public class ContactDAO {
 		try {
 			DatabaseConnection.dbConnect();
 			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);
-			
-			
-			
-//			PreparedStatement stmt = DatabaseConnection.connection.prepareStatement(sql);						
-//			stmt.setInt(1, 5);
-//			stmt.setString(2, contact.getContactName());
-//			stmt.setString(3, contact.getContactAlias());
-//			stmt.setString(4, contact.getContactBillingAddress());
-//			stmt.setString(5, contact.getContactBusinessNumber());
-//			stmt.setString(6, contact.getContactPhoneNumber());
-//			
-//			stmt.execute();
+			stmt.execute(sql);			
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

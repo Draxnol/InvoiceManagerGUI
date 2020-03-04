@@ -3,6 +3,7 @@ package draxnol.InvoiceManagerGUI;
 import java.sql.SQLException;
 
 import draxnol.contact.Contact;
+import draxnol.contact.Contact.ContactStatus;
 import draxnol.contact.ContactDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -72,18 +73,15 @@ public class ContactManagerController {
 				Contact selectedContact = contactListView.getItems().get(selectedIndex);
 				textFieldContactName.setText(selectedContact.getContactName());
 				textFieldAlias.setText(selectedContact.getContactAlias());
-				textFieldCount.setText(String.valueOf(selectedContact.getContactID()));
+				textFieldCount.setText(String.valueOf(selectedContact.getContactInvoiceCount()));
 				textFieldPhoneNumber.setText(selectedContact.getContactPhoneNumber());
 				textFieldEmail.setText(selectedContact.getContactEmailAddress());
 				textFieldContactBusinessNumber.setText(selectedContact.getContactBusinessNumber());
 				textAreaBillingAddress.setText(selectedContact.getContactBillingAddress());
-			
-			
-			}catch(IndexOutOfBoundsException e){
+
+			} catch (IndexOutOfBoundsException e) {
 				System.out.println(e);
 			}
-			
-			
 
 		});
 
@@ -91,7 +89,10 @@ public class ContactManagerController {
 
 	@FXML
 	private void newContact() {
-		contactListView.getItems().add(new Contact("new contact"));
+		Contact newContact = new Contact();
+		newContact.status = ContactStatus.NEW;
+		contactListView.getItems().add(newContact);
+		
 	}
 
 	@FXML
@@ -100,13 +101,27 @@ public class ContactManagerController {
 		Contact selectedContact = contactListView.getItems().get(selectedIndex);
 		selectedContact.setContactAlias(textFieldAlias.getText());
 		selectedContact.setContactName(textFieldContactName.getText());
-		selectedContact.setContactInvoiceCount(5);
+		selectedContact.setContactInvoiceCount(Integer.valueOf(textFieldCount.getText()));
 		selectedContact.setContactPhoneNumber(textFieldPhoneNumber.getText());
 		selectedContact.setContactEmailAddress(textFieldEmail.getText());
 		selectedContact.setContactBusinessNumber(textFieldContactBusinessNumber.getText());
 		selectedContact.setContactBillingAddress(textAreaBillingAddress.getText());
+		if(selectedContact.status == ContactStatus.NEW) {
+			
+			try {
+				
+				selectedContact.status = ContactStatus.CREATED;
+				ContactDAO.insertNewContact(selectedContact);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else {
+			ContactDAO.updateContact(selectedContact);
+		}
+		
 		System.out.println("Updating db");
-		ContactDAO.updateContact(selectedContact);
+		
 		try {
 			contactListView.setItems(ContactDAO.loadAllContactsDB());
 		} catch (SQLException e) {
