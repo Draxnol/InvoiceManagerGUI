@@ -42,7 +42,7 @@ public class ContactManagerController {
 
 	@FXML
 	private TextField textFieldContactBusinessNumber;
-	
+
 	@FXML
 	private Button btnSave;
 
@@ -67,22 +67,52 @@ public class ContactManagerController {
 		});
 		contactListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
 			System.out.println("Something changed.");
-			int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
-			Contact selectedContact = contactListView.getItems().get(selectedIndex);
-			textFieldContactName.setText(selectedContact.getContactName());
-			textFieldAlias.setText(selectedContact.getContactAlias());
-			textFieldCount.setText(String.valueOf(selectedContact.getContactID()));
-			textFieldPhoneNumber.setText(selectedContact.getContactPhoneNumber());
-			textFieldEmail.setText(selectedContact.getContactEmailAddress());
-			textFieldContactBusinessNumber.setText(selectedContact.getContactBusinessNumber());
-			textAreaBillingAddress.setText(selectedContact.getContactBillingAddress());
+			try {
+				int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
+				Contact selectedContact = contactListView.getItems().get(selectedIndex);
+				textFieldContactName.setText(selectedContact.getContactName());
+				textFieldAlias.setText(selectedContact.getContactAlias());
+				textFieldCount.setText(String.valueOf(selectedContact.getContactID()));
+				textFieldPhoneNumber.setText(selectedContact.getContactPhoneNumber());
+				textFieldEmail.setText(selectedContact.getContactEmailAddress());
+				textFieldContactBusinessNumber.setText(selectedContact.getContactBusinessNumber());
+				textAreaBillingAddress.setText(selectedContact.getContactBillingAddress());
 			
+			
+			}catch(IndexOutOfBoundsException e){
+				System.out.println(e);
+			}
+			
+			
+
 		});
 
 	}
-	@FXML 
+
+	@FXML
 	private void newContact() {
 		contactListView.getItems().add(new Contact("new contact"));
+	}
+
+	@FXML
+	private void saveContact() {
+		int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
+		Contact selectedContact = contactListView.getItems().get(selectedIndex);
+		selectedContact.setContactAlias(textFieldAlias.getText());
+		selectedContact.setContactName(textFieldContactName.getText());
+		selectedContact.setContactInvoiceCount(5);
+		selectedContact.setContactPhoneNumber(textFieldPhoneNumber.getText());
+		selectedContact.setContactEmailAddress(textFieldEmail.getText());
+		selectedContact.setContactBusinessNumber(textFieldContactBusinessNumber.getText());
+		selectedContact.setContactBillingAddress(textAreaBillingAddress.getText());
+		System.out.println("Updating db");
+		ContactDAO.updateContact(selectedContact);
+		try {
+			contactListView.setItems(ContactDAO.loadAllContactsDB());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

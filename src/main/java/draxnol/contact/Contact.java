@@ -160,5 +160,16 @@ public class Contact {
 		String summaryString = "Contact name " + this.getContactName(); 
 		return summaryString;
 	}
-	
+	@Override
+	public String toString() {
+		String retString = "Contact ID" + contactID.get()
+				+ "Contact name:" + contactName.get()
+				+ "Contact business number:" + contactBusinessNumber.get()
+				+ "Contact alias: " + contactAlias.get()
+				+ "contact billing address:" + contactBillingAddress.get()
+				+ "contact phone" + contactPhoneNumber.get()
+				+ "contact email" + contactEmailAddress.get()
+				+ "contact invoice count" + String.valueOf(contactInvoiceCount.get());
+		return retString;
+	}
 }

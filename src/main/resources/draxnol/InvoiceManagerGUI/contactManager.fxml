@@ -164,7 +164,7 @@
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <Button fx:id="btnSave" mnemonicParsing="false" text="Save" GridPane.rowIndex="10">
+                        <Button fx:id="btnSave" mnemonicParsing="false" text="Save" GridPane.rowIndex="10" onAction="#saveContact">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>

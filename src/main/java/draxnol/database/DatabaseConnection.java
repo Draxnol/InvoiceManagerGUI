@@ -58,17 +58,16 @@ public class DatabaseConnection {
 		return resultSet;
 	}
 
-	public static void updateDB(String statement) throws SQLException {
-		PreparedStatement stmt = null;
+	public static void updateDB(PreparedStatement statement) throws SQLException {
+		
 		try {
 			dbConnect();
-			stmt = connection.prepareStatement(statement);
-			stmt.executeUpdate();
+			statement.executeUpdate();
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			if (stmt != null) {
-				stmt.close();
+			if (statement != null) {
+				statement.close();
 			}
 			dbDisconnect();
 

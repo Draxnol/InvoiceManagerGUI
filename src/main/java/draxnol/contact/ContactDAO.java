@@ -1,7 +1,9 @@
 package draxnol.contact;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import draxnol.database.DatabaseConnection;
 import javafx.collections.FXCollections;
@@ -34,7 +36,10 @@ public class ContactDAO {
 				contact.setContactAlias(rs.getString("contactAlias"));
 				contact.setContactName(rs.getString("contactName"));
 				contact.setContactInvoiceCount(rs.getInt("contactInvoiceCount"));
-				contact.setContactBillingAddress("contactBillingAddress");
+				contact.setContactBillingAddress(rs.getString("contactBillingAddress"));
+				contact.setContactEmailAddress(rs.getString("contactEmailAddress"));
+				contact.setContactPhoneNumber(rs.getString("contactPhoneNumber"));
+				contact.setContactBusinessNumber(rs.getString("contactBusinessNumber"));
 				contacts.add(contact);
 			}
 		} catch (SQLException e) {
@@ -61,6 +66,56 @@ public class ContactDAO {
 				+ "" + contactAlias +""
 				+ "" + contactBillingAddress +""	
 				+ ");" ;
+	}
+
+	public static void updateContact(Contact contact) {
+	
+//		System.out.println(contact.toString());
+//		String sql = "UPDATE contacts "
+//				+ "SET contactInvoiceCount = ?, "
+//				+ "contactName = ?, "
+//				+ "contactAlias = ?, "
+//				+ "contactBillingAddress= ?, "
+//				+ "contactBusinessNumber = ?, "
+//				+ "contactPhoneNumber = ? "
+//				+ "WHERE contactID = ?; ";
+	
+		
+		String sql = "UPDATE contacts "
+				+ "Set contactInvoiceCount = " + contact.getContactInvoiceCount()
+				+ ", contactName = '" + contact.getContactName()
+				+ "', contactAlias = '" + contact.getContactAlias()
+				+ "', contactBillingAddress = '" + contact.getContactBillingAddress()
+				+ "', contactBusinessNumber = '" + contact.getContactBusinessNumber()
+				+ "', contactPhoneNumber = '" + contact.getContactPhoneNumber()
+				+ "', contactEmailAddress = '" + contact.getContactEmailAddress()
+				+ "' WHERE contactID = " + contact.getContactID()
+				+ ";" ;
+		System.out.println(sql);
+		try {
+			DatabaseConnection.dbConnect();
+			Statement stmt = DatabaseConnection.connection.createStatement();
+			stmt.execute(sql);
+			
+			
+			
+//			PreparedStatement stmt = DatabaseConnection.connection.prepareStatement(sql);						
+//			stmt.setInt(1, 5);
+//			stmt.setString(2, contact.getContactName());
+//			stmt.setString(3, contact.getContactAlias());
+//			stmt.setString(4, contact.getContactBillingAddress());
+//			stmt.setString(5, contact.getContactBusinessNumber());
+//			stmt.setString(6, contact.getContactPhoneNumber());
+//			
+//			stmt.execute();
+			DatabaseConnection.dbDisconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+				
+				
 	}
 	
 }

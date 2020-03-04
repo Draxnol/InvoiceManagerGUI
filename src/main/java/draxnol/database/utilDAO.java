@@ -12,7 +12,8 @@ public class utilDAO {
 				+ "		contactAlias text NOT NULL, \n"
 				+ "		contactBillingAddress text NOT NULL,"
 				+ "		contactBusinessNumber text,"
-				+ "		contactPhoneNumber text"
+				+ "		contactPhoneNumber text,"
+				+ "		contactEmailAddress text"
 				+ ");";			
 		try {
 			DatabaseConnection.updateDBStructure(sqlString);
