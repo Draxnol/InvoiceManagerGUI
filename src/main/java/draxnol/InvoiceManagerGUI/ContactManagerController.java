@@ -5,12 +5,14 @@ import java.sql.SQLException;
 import draxnol.contact.Contact;
 import draxnol.contact.Contact.ContactStatus;
 import draxnol.contact.ContactDAO;
+import draxnol.contact.ContactManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class ContactManagerController {
 
@@ -19,6 +21,9 @@ public class ContactManagerController {
 
 	@FXML
 	private Button btnNew;
+
+	@FXML
+	private Button btnSelect;
 
 	@FXML
 	private Button btnDelete;
@@ -92,7 +97,18 @@ public class ContactManagerController {
 		Contact newContact = new Contact();
 		newContact.status = ContactStatus.NEW;
 		contactListView.getItems().add(newContact);
-		
+
+	}
+
+	@FXML
+	private void selectContact() {
+		int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
+		Contact selectedContact = contactListView.getItems().get(selectedIndex);
+		System.out.println(selectedContact);
+		ContactManager.getInstance().setContact(selectedContact);
+		ContactManager.getInstance().updateLabel();
+		Stage stage = (Stage) btnSelect.getScene().getWindow();
+		stage.close();
 	}
 
 	@FXML

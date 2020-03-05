@@ -51,7 +51,7 @@
                <bottom>
                   <HBox prefHeight="26.0" prefWidth="488.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" text="Select">
+                        <Button fx:id="btnSelect"  mnemonicParsing="false" text="Select" onAction="#selectContact">
                            <opaqueInsets>
                               <Insets left="5.0" />
                            </opaqueInsets>

@@ -2,6 +2,10 @@ package draxnol.InvoiceManagerGUI;
 
 import java.io.IOException;
 
+
+
+import draxnol.contact.Contact;
+import draxnol.contact.ContactManager;
 import draxnol.database.utilDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +22,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class PrimaryController {
-
+	
+	
 	@FXML
 	private Font x1;
 
@@ -78,7 +83,17 @@ public class PrimaryController {
 
 	@FXML
 	private Color x4;
-
+	
+	
+	
+	@FXML
+	private void initialize() {
+		labelSelectedContact.textProperty().bind(ContactManager.getInstance().contactLabel);
+	}
+	
+	public PrimaryController() {
+		
+	}
 	@FXML
 	private void openContactManager() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
@@ -87,11 +102,16 @@ public class PrimaryController {
 		contactStage.setTitle("Contact Manager");
 		contactStage.setScene(ContactManagerScene);
 		contactStage.show();
+		
+		
+	
 	}
 
 	@FXML
 	private void loadDB() {
-		utilDAO.createContactTable();
+		System.out.println("selected contact is: " + ContactManager.getInstance().getContact());
 	}
+
+
 
 }
