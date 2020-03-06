@@ -109,7 +109,7 @@ public class PrimaryController {
 
 	@FXML
 	private void loadDB() {
-		System.out.println("selected contact is: " + ContactManager.getInstance().getContact());
+		utilDAO.createInvoiceTable();
 	}
 
 

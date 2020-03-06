@@ -19,7 +19,6 @@ public class ContactDAO {
 			rs.close();
 			return contactList;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			throw e;
 		}
 
