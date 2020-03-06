@@ -33,7 +33,7 @@ public class utilDAO {
 				+ "payableAddress  TEXT not null, \n"
 				+ "billingAddress  TEXT not null,\n"
 				+ "invoiceDateString  TEXT not null,"
-				+ "invoiceTotal INTEGER not null,"
+				+ "invoiceTotal REAL not null,"
 				+ "	FOREIGN KEY(contactID)\r\n" + 
 				"		REFERENCES contacts(contactID)\r\n" + 
 				"		ON DELETE CASCADE\r\n" + 

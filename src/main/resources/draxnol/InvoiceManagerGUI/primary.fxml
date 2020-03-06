@@ -105,14 +105,14 @@
                   </Label>
                   <VBox layoutX="10.0" layoutY="169.0" prefHeight="362.0" prefWidth="266.0">
                      <children>
-                        <ListView fx:id="listViewInvoiceTable" prefHeight="334.0" prefWidth="266.0" />
+                        <ListView fx:id="invoicesListView" prefHeight="334.0" prefWidth="266.0" />
                         <HBox prefHeight="23.0" prefWidth="266.0">
                            <children>
-                              <Button fx:id="btnAddInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="Add">
+                              <Button fx:id="btnAddInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="Add" onAction="#addNewInvoice">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin></Button>
-                              <Button fx:id="btnDeleteInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Delete" />
+                              <Button fx:id="btnDeleteInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Delete" onAction="#deleteSelectedInvoice"/>
                            </children>
                         </HBox>
                      </children>

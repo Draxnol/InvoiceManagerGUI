@@ -23,13 +23,27 @@ public class Invoice {
 	private Date invoiceDate;
 	private SimpleDateFormat dateFormat;
 	private SimpleStringProperty invoiceDateString;
+	public InvoiceStatus invoiceStatus;
 	
-
+	
+	public enum InvoiceStatus{
+		NOT_SAVED,
+		SAVED,
+	}
 
 	
 	public Invoice() {
+		init();
+	}
+	
+	public Invoice(int invoiceNumber) {
+		init();
+		this.invoiceStatus = InvoiceStatus.NOT_SAVED;
+		this.invoiceNumber.set(invoiceNumber);
+	}
+	
+	private void init() {
 		this.dateFormat = new SimpleDateFormat();
-
 		this.invoiceID = new SimpleIntegerProperty();
 		this.contactID = new SimpleIntegerProperty();
 		this.invoiceNumber = new SimpleIntegerProperty();
@@ -38,9 +52,8 @@ public class Invoice {
 		this.billingAddress = new SimpleStringProperty();
 		this.invoiceTotal = new SimpleDoubleProperty();
 		this.invoiceDateString = new SimpleStringProperty();
+	} 
 	
-	
-	}
 	/*Date stuff*/
 	//TODO Proper date handling, SQLite requires using yyyy/mm/dd
 	public void setDate(String date) {
@@ -143,6 +156,10 @@ public class Invoice {
 	}
 	public SimpleDoubleProperty invoiceTotalProperty() {
 		return invoiceTotal;
+	}
+	public String getInvoiceSummary() {
+		String retString = "Invoice number: " + invoiceNumber.get() + " Date: " + invoiceDateString.get();
+		return retString;
 	}
 	
 	

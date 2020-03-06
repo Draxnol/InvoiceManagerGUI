@@ -72,7 +72,7 @@ public class ContactManagerController {
 
 		});
 		contactListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-			System.out.println("Something changed.");
+			System.out.println("Contact Selection Changed.");
 			try {
 				int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
 				Contact selectedContact = contactListView.getItems().get(selectedIndex);

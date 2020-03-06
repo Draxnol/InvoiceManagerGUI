@@ -12,10 +12,10 @@ public class InvoiceDAO {
 
 	public static ObservableList<Invoice> loadSelectedContactInvoices(int contactID) throws SQLException {
 		System.out.println("Loading contacts....");
-		String sql = "SELECT * FROM contacts WHERE contactID = "+ contactID +";";
+		String sql = "SELECT * FROM invoices WHERE contactID = "+ contactID +";";
 		try {
 			ResultSet rs = DatabaseConnection.dbQuery(sql);
-			ObservableList<Invoice> contactList = getContactObList(rs);
+			ObservableList<Invoice> contactList = getInvoiceObList(rs);
 			DatabaseConnection.dbDisconnect();
 			rs.close();
 			return contactList;
@@ -25,14 +25,20 @@ public class InvoiceDAO {
 
 	}
 
-	public static ObservableList<Invoice> getContactObList(ResultSet rs) throws SQLException {
+	public static ObservableList<Invoice> getInvoiceObList(ResultSet rs) throws SQLException {
 		ObservableList<Invoice> invoices = FXCollections.observableArrayList();
 
 		try {
 			while (rs.next()) {
 				Invoice invoice = new Invoice();
+				
 				invoice.setInvoiceID(rs.getInt("invoiceID"));
 				invoice.setContactID(rs.getInt("contactID"));
+				invoice.setDate(rs.getString("invoiceDateString"));
+				invoice.setInvoiceBillingAddress("billingAddress");
+				invoice.setInvoicePayableAddress("payableAddress");
+				invoice.setInvoiceTotal(rs.getDouble("invoiceTotal"));
+				invoice.setInvoiceNumber(rs.getInt("invoiceNumber"));
 				invoices.add(invoice);
 			}
 		} catch (SQLException e) {
