@@ -254,12 +254,8 @@ public class PrimaryController {
 				InvoiceDAO.addNewInvoice(selectedInvoice);
 				ContactDAO.updateContactInvoiceCount();
 			}
-			
-			
-			
+
 			InvoiceDAO.saveRows(selectedInvoice.getInvoiceRows(), selectedInvoice.getInvoiceID());
-			
-			
 
 		} catch (IndexOutOfBoundsException e) {
 			System.out.println(e);
@@ -279,12 +275,14 @@ public class PrimaryController {
 	private void deleteSelectedRow() {
 		if (ContactManager.getInstance().getContact() != null) {
 			int selectedIndex = tableViewInvoiceTable.getSelectionModel().getSelectedIndex();
-			
-			try{
+
+			try {
+				int rowID = tableViewInvoiceTable.getItems().get(selectedIndex).getRowID();
 				tableViewInvoiceTable.getItems().remove(selectedIndex);
-			}catch(IndexOutOfBoundsException e) {
+				InvoiceDAO.deleteRow(rowID);
+			} catch (IndexOutOfBoundsException e) {
 				System.out.println(e + "throw a selection error at somepoint");
 			}
-			}
 		}
+	}
 }

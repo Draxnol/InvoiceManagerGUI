@@ -185,5 +185,19 @@ public class InvoiceDAO {
 		
 		return invoiceRows;
 	}
+
+	public static void deleteRow(int rowID) {
+		String sql = "DELETE FROM invoiceRows WHERE rowID = " + rowID;
+	
+		try {
+			DatabaseConnection.dbConnect();
+			Statement stmt = DatabaseConnection.connection.createStatement();
+			stmt.execute(sql);			
+			DatabaseConnection.dbDisconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }
