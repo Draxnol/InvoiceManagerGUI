@@ -48,7 +48,23 @@ public class utilDAO {
 	}
 
 	public static void createInvoiceRowTable() {
-		String sqlString = "CREATE TABLE IF NOT EXISTS";
+		String sqlString = "CREATE TABLE IF NOT EXISTS invoiceRows(\n"
+				+ "rowID INTEGER PRIMARY KEY, \n"
+				+ "invoiceID INTEGER NOT NULL, \n"
+				+ "rowNumber INTEGER NOT NULL, \n"
+				+ "unitInfo TEXT NOT NULL, \n"
+				+ "unitDesc TEXT NOT NULL, \n"
+				+ "unitCost REAL NOT NULL,"
+				+ "FOREIGN KEY(invoiceID)\r\n"
+				+ "		REFERENCES invoices(invoiceID)\r\n"
+				+ "		ON DELETE CASCADE"
+				+ "		ON UPDATE NO ACTION);";
+		try {
+			DatabaseConnection.updateDBStructure(sqlString);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 }
 
 

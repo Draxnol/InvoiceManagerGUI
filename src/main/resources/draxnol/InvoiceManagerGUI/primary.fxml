@@ -11,7 +11,6 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -108,11 +107,11 @@
                         <ListView fx:id="invoicesListView" prefHeight="334.0" prefWidth="266.0" />
                         <HBox prefHeight="23.0" prefWidth="266.0">
                            <children>
-                              <Button fx:id="btnAddInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="Add" onAction="#addNewInvoice">
+                              <Button fx:id="btnAddInvoice" mnemonicParsing="false" onAction="#addNewInvoice" prefHeight="25.0" prefWidth="50.0" text="Add">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin></Button>
-                              <Button fx:id="btnDeleteInvoice" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Delete" onAction="#deleteSelectedInvoice"/>
+                              <Button fx:id="btnDeleteInvoice" mnemonicParsing="false" onAction="#deleteSelectedInvoice" prefHeight="25.0" prefWidth="51.0" text="Delete" />
                            </children>
                         </HBox>
                      </children>
@@ -124,12 +123,7 @@
             <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" textFill="$x2" wrapText="false" />
                   <AnchorPane layoutY="276.0" prefHeight="226.0" prefWidth="510.0">
                      <children>
-                        <TableView fx:id="tableViewInvoiceTable" layoutX="-11.0" layoutY="8.0" prefHeight="226.0" prefWidth="510.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
-                        </TableView>
+                        <TableView fx:id="tableViewInvoiceTable" layoutX="-11.0" layoutY="8.0" prefHeight="226.0" prefWidth="510.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                   <GridPane layoutX="14.0" layoutY="41.0" prefHeight="226.0" prefWidth="492.0">
@@ -168,9 +162,9 @@
                         <Button fx:id="btnLoadDB" mnemonicParsing="false" onAction="#loadDB" text="Button" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
-                  <Button fx:id="btnNewRow" layoutX="510.0" layoutY="301.0" mnemonicParsing="false" text="New Row" />
-                  <Button fx:id="btnDeleteRow" layoutX="510.0" layoutY="336.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Del Row" />
-                  <Button fx:id="btnSave" layoutX="510.0" layoutY="477.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Save" />
+                  <Button fx:id="btnNewRow" layoutX="510.0" layoutY="301.0" mnemonicParsing="false" text="New Row" onAction="#addNewRow"/>
+                  <Button fx:id="btnDeleteRow" layoutX="510.0" layoutY="336.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Del Row" onAction="#deleteSelectedRow"/>
+                  <Button fx:id="btnSave" layoutX="510.0" layoutY="477.0" mnemonicParsing="false" onAction="#saveSelectedInvoice" prefHeight="25.0" prefWidth="64.0" text="Save" />
           </children>
         </AnchorPane>
       </items>

@@ -7,6 +7,7 @@ import java.util.Date;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Invoice {
@@ -25,6 +26,8 @@ public class Invoice {
 	private SimpleStringProperty invoiceDateString;
 	public InvoiceStatus invoiceStatus;
 	
+	public ObservableList<InvoiceRow> invoiceRows = FXCollections.observableArrayList();
+	
 	
 	public enum InvoiceStatus{
 		NOT_SAVED,
@@ -36,10 +39,11 @@ public class Invoice {
 		init();
 	}
 	
-	public Invoice(int invoiceNumber) {
+	public Invoice(int invoiceNumber, int contactID) {
 		init();
 		this.invoiceStatus = InvoiceStatus.NOT_SAVED;
 		this.invoiceNumber.set(invoiceNumber);
+		this.contactID.set(contactID);
 	}
 	
 	private void init() {
@@ -52,6 +56,8 @@ public class Invoice {
 		this.billingAddress = new SimpleStringProperty();
 		this.invoiceTotal = new SimpleDoubleProperty();
 		this.invoiceDateString = new SimpleStringProperty();
+		
+	
 	} 
 	
 	/*Date stuff*/
@@ -162,6 +168,31 @@ public class Invoice {
 		return retString;
 	}
 	
+	public InvoiceStatus getInvoiceStatus() {
+		return this.invoiceStatus;
+	}
 	
+	
+	/*Invoice Row*/
+	
+	public ObservableList<InvoiceRow> getInvoiceRows(){
+		return invoiceRows;
+	}
+	
+	public void addInvoiceRow() {
+		
+	}
+	
+	public void setInvoiceRow(ObservableList<InvoiceRow> invoiceRows) {
+		this.invoiceRows = invoiceRows;
+	}
+		
+	
+	/*Status*/
+	public void setInvoiceStatusSaved() {
+		this.invoiceStatus = InvoiceStatus.SAVED;
+		
+	}
+
 }
 

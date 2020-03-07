@@ -59,7 +59,7 @@ public class DatabaseConnection {
 	}
 
 	public static void updateDB(PreparedStatement statement) throws SQLException {
-		
+
 		try {
 			dbConnect();
 			statement.executeUpdate();

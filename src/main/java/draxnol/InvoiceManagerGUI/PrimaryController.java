@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import draxnol.contact.Contact;
+import draxnol.contact.ContactDAO;
 import draxnol.contact.ContactManager;
 import draxnol.database.utilDAO;
 import draxnol.invoice.Invoice;
 import draxnol.invoice.InvoiceDAO;
+import draxnol.invoice.InvoiceRow;
+import draxnol.invoice.Invoice.InvoiceStatus;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -18,12 +21,17 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.converter.DoubleStringConverter;
 
 public class PrimaryController {
 
@@ -55,7 +63,7 @@ public class PrimaryController {
 	private Button btnDeleteInvoice;
 
 	@FXML
-	private TableView<?> tableViewInvoiceTable;
+	private TableView<InvoiceRow> tableViewInvoiceTable;
 
 	@FXML
 	private TextArea textFieldBillingPayable;
@@ -89,8 +97,43 @@ public class PrimaryController {
 
 	@FXML
 	private void initialize() {
+		/* Invoice table view */
+		tableViewInvoiceTable.setEditable(true);
+		TableColumn<InvoiceRow, String> unitInfoCol = new TableColumn<>("unit");
+
+		unitInfoCol.setCellValueFactory(cellData -> cellData.getValue().unitInfoProperty());
+
+		unitInfoCol.setCellFactory(TextFieldTableCell.<InvoiceRow>forTableColumn());
+		unitInfoCol.setOnEditCommit((CellEditEvent<InvoiceRow, String> t) -> {
+			((InvoiceRow) t.getTableView().getItems().get(t.getTablePosition().getRow())).setUnitInfo(t.getNewValue());
+
+		});
+
+		TableColumn<InvoiceRow, String> unitDescCol = new TableColumn<>("desc");
+
+		unitDescCol.setCellValueFactory(cellData -> cellData.getValue().unitDescProperty());
+
+		unitDescCol.setCellFactory(TextFieldTableCell.<InvoiceRow>forTableColumn());
+		unitDescCol.setOnEditCommit((CellEditEvent<InvoiceRow, String> t) -> {
+			((InvoiceRow) t.getTableView().getItems().get(t.getTablePosition().getRow())).setUnitDesc(t.getNewValue());
+
+		});
+
+		TableColumn<InvoiceRow, Double> unitCostCol = new TableColumn<>("cost");
+
+		unitCostCol.setCellValueFactory(new PropertyValueFactory<>("unitCost"));
+		unitCostCol.setCellValueFactory(cellData -> cellData.getValue().unitCostProperty().asObject());
+		unitCostCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+		unitCostCol.setOnEditCommit((CellEditEvent<InvoiceRow, Double> t) -> {
+			((InvoiceRow) t.getTableView().getItems().get(t.getTablePosition().getRow())).setUnitCost(t.getNewValue());
+
+		});
+		tableViewInvoiceTable.getColumns().addAll(unitInfoCol, unitDescCol, unitCostCol);
+
+		/* Selected contact label */
 		labelSelectedContact.textProperty().bind(ContactManager.getInstance().contactLabel);
 
+		/* Action fires when contact is changed */
 		labelSelectedContact.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -100,6 +143,7 @@ public class PrimaryController {
 			}
 
 		});
+		/* invoice list view */
 		invoicesListView.setCellFactory(param -> new ListCell<Invoice>() {
 			@Override
 			protected void updateItem(Invoice invoice, boolean empty) {
@@ -114,19 +158,24 @@ public class PrimaryController {
 
 		});
 
+		// This is where invoice selection happens.
 		invoicesListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
 			System.out.println("Invoice Selection changed");
 			Invoice currentInvoice = invoicesListView.getSelectionModel().getSelectedItem();
 			try {
 				dateFieldDate.getEditor().setText(currentInvoice.getInvoiceDateString());
 				textFieldInvoiceNumber.setText(String.valueOf(currentInvoice.getInvoiceNumber()));
-			} catch (IndexOutOfBoundsException e) {
+				currentInvoice.setInvoiceRow(InvoiceDAO.loadInvoiceRows(currentInvoice));
+				System.out.println(currentInvoice.getInvoiceRows());
+				tableViewInvoiceTable.setItems(currentInvoice.getInvoiceRows());
+			} catch (IndexOutOfBoundsException | SQLException e) {
 				System.out.println(e);
 			}
 		});
 
 	}
 
+	/* Support functions */
 	private void populateGUI() {
 		Contact currentContact = ContactManager.getInstance().getContact();
 		textFieldBillTo.setText(currentContact.getContactBillingAddress());
@@ -145,10 +194,7 @@ public class PrimaryController {
 
 	}
 
-	public PrimaryController() {
-
-	}
-
+	/* Contact Manager */
 	@FXML
 	private void openContactManager() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
@@ -160,16 +206,19 @@ public class PrimaryController {
 
 	}
 
+	/* Debug button */
 	@FXML
 	private void loadDB() {
 		utilDAO.createInvoiceTable();
 	}
 
+	/* Invoice related buttons */
 	@FXML
 	private void addNewInvoice() {
 		if (ContactManager.getInstance().getContact() != null) {
 			int invoiceCount = ContactManager.getInstance().getContact().getContactInvoiceCount();
-			invoicesListView.getItems().add(new Invoice(invoiceCount));
+			invoicesListView.getItems()
+					.add(new Invoice(invoiceCount, ContactManager.getInstance().getContact().getContactID()));
 			ContactManager.getInstance().getContact().incrementInvoiceCount();
 		}
 	}
@@ -187,4 +236,55 @@ public class PrimaryController {
 		}
 
 	}
+
+	@FXML
+	private void saveSelectedInvoice() {
+		int currentSelectionIndex = invoicesListView.getSelectionModel().getSelectedIndex();
+		try {
+			Invoice selectedInvoice = invoicesListView.getItems().get(currentSelectionIndex);
+			selectedInvoice.setDate(dateFieldDate.getEditor().getText());
+			selectedInvoice.setInvoiceBillingAddress(textFieldBillTo.getText());
+			selectedInvoice.setInvoicePayableAddress(textFieldBillingPayable.getText());
+
+			if (selectedInvoice.getInvoiceStatus().equals(InvoiceStatus.SAVED)) {
+				System.out.println("Invoice Status is saved");
+				InvoiceDAO.updateInvoice(selectedInvoice);
+			} else if (selectedInvoice.getInvoiceStatus().equals(InvoiceStatus.NOT_SAVED)) {
+				System.out.println("Invoice Status is not saved");
+				InvoiceDAO.addNewInvoice(selectedInvoice);
+				ContactDAO.updateContactInvoiceCount();
+			}
+			
+			
+			
+			InvoiceDAO.saveRows(selectedInvoice.getInvoiceRows(), selectedInvoice.getInvoiceID());
+			
+			
+
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(e);
+		}
+
+	}
+	/* table row buttons */
+
+	@FXML
+	private void addNewRow() {
+		if (ContactManager.getInstance().getContact() != null)
+			tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0));
+
+	}
+
+	@FXML
+	private void deleteSelectedRow() {
+		if (ContactManager.getInstance().getContact() != null) {
+			int selectedIndex = tableViewInvoiceTable.getSelectionModel().getSelectedIndex();
+			
+			try{
+				tableViewInvoiceTable.getItems().remove(selectedIndex);
+			}catch(IndexOutOfBoundsException e) {
+				System.out.println(e + "throw a selection error at somepoint");
+			}
+			}
+		}
 }

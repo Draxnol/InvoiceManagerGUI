@@ -8,6 +8,7 @@ module draxnol.InvoiceManagerGUI {
     opens draxnol.InvoiceManagerGUI to javafx.fxml;
     exports draxnol.InvoiceManagerGUI;
     exports draxnol.contact to draxnol.InvoiceManagerGUI;
- 
+    opens draxnol.invoice to javafx.base;
+	
 }
 

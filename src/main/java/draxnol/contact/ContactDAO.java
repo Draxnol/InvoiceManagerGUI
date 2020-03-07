@@ -50,72 +50,63 @@ public class ContactDAO {
 
 	public static void insertNewContact(Contact contact) throws SQLException {
 		String sql = "INSERT INTO contacts(contactInvoiceCount,contactName,contactAlias,contactBillingAddress,contactBusinessNumber,contactPhoneNumber,contactEmailAddress) VALUES("
-				+ "" + contact.getContactInvoiceCount()
-				+ ",'" + contact.getContactName()
-				+ "','" + contact.getContactAlias()
-				+ "','" + contact.getContactBillingAddress()
-				+ "','" + contact.getContactBusinessNumber()
-				+ "','" + contact.getContactPhoneNumber()
-				+ "','" + contact.getContactEmailAddress()
-				+ "')"
-				+ ";" ;
+				+ "" + contact.getContactInvoiceCount() + ",'" + contact.getContactName() + "','"
+				+ contact.getContactAlias() + "','" + contact.getContactBillingAddress() + "','"
+				+ contact.getContactBusinessNumber() + "','" + contact.getContactPhoneNumber() + "','"
+				+ contact.getContactEmailAddress() + "')" + ";";
 		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
 			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);			
+			stmt.execute(sql);
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	
+
 	}
 
 	public static void updateContact(Contact contact) {
-	//TODO Use prepared statements instead.
-		
-		String sql = "UPDATE contacts "
-				+ "Set contactInvoiceCount = " + contact.getContactInvoiceCount()
-				+ ", contactName = '" + contact.getContactName()
-				+ "', contactAlias = '" + contact.getContactAlias()
-				+ "', contactBillingAddress = '" + contact.getContactBillingAddress()
-				+ "', contactBusinessNumber = '" + contact.getContactBusinessNumber()
-				+ "', contactPhoneNumber = '" + contact.getContactPhoneNumber()
-				+ "', contactEmailAddress = '" + contact.getContactEmailAddress()
-				+ "' WHERE contactID = " + contact.getContactID()
-				+ ";" ;
+		// TODO Use prepared statements instead.
+
+		String sql = "UPDATE contacts " + "Set contactInvoiceCount = " + contact.getContactInvoiceCount()
+				+ ", contactName = '" + contact.getContactName() + "', contactAlias = '" + contact.getContactAlias()
+				+ "', contactBillingAddress = '" + contact.getContactBillingAddress() + "', contactBusinessNumber = '"
+				+ contact.getContactBusinessNumber() + "', contactPhoneNumber = '" + contact.getContactPhoneNumber()
+				+ "', contactEmailAddress = '" + contact.getContactEmailAddress() + "' WHERE contactID = "
+				+ contact.getContactID() + ";";
 		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
 			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);			
+			stmt.execute(sql);
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-				
-				
+
 	}
 
-	public static void deleteContact(Contact selectedContact) throws SQLException{
-		String sql = "DELETE FROM contacts WHERE contactID ='"
-				+ selectedContact.getContactID() +
-				"'";
-		
+	public static void deleteContact(Contact selectedContact) throws SQLException {
+		String sql = "DELETE FROM contacts WHERE contactID ='" + selectedContact.getContactID() + "'";
+
 		try {
 			DatabaseConnection.dbConnect();
 			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);			
+			stmt.execute(sql);
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
+	public static void updateContactInvoiceCount() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
