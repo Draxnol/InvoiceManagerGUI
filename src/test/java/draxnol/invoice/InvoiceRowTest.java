@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class InvoiceRowTest {
 
 	@Before
@@ -12,98 +15,93 @@ public class InvoiceRowTest {
 	}
 
 	@Test
-	public void testInvoiceRow() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testGetInvoiceID() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		instance.setInvoiceID(5);
+		assertEquals(5, instance.getInvoiceID());
 	}
 
 	@Test
 	public void testGetRowID() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		instance.setRowID(1);
+		assertEquals(1, instance.getRowID());
 	}
 
 	@Test
 	public void testGetRowNumber() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetInvoiceID() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetRowID() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetRowNumber() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		instance.setRowNumber(12);
+		assertEquals(12, instance.getRowNumber());
 	}
 
 	@Test
 	public void testSetUnitInfoSimpleStringProperty() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		instance.unitInfoProperty().set("unit 1232");
+		assertEquals("unit 1232", instance.unitInfoProperty().get());
+		
 	}
 
 	@Test
 	public void testSetUnitDescSimpleStringProperty() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		instance.unitDescProperty().set("built a wall");
+		assertEquals("built a wall", instance.unitDescProperty().get());
 	}
 
 	@Test
 	public void testSetUnitCostSimpleDoubleProperty() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		instance.unitCostProperty().set(45.43);
+		assertEquals(45.43, instance.unitCostProperty().get(),0.1 );
 	}
 
 	@Test
 	public void testUnitInfoProperty() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		assertTrue(instance.unitInfoProperty() instanceof SimpleStringProperty);
+		
 	}
 
 	@Test
 	public void testGetUnitInfo() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		instance.setUnitInfo("123");
+		assertEquals("123",instance.getUnitInfo());
+		
 	}
 
-	@Test
-	public void testSetUnitInfoString() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testUnitDescProperty() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		assertTrue(instance.unitDescProperty() instanceof SimpleStringProperty);
+		
 	}
 
 	@Test
 	public void testGetUnitDesc() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		instance.setUnitDesc("built a wall");
+		assertEquals("built a wall", instance.getUnitDesc());
 	}
 
-	@Test
-	public void testSetUnitDescString() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testUnitCostProperty() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		assertTrue(instance.unitCostProperty() instanceof SimpleDoubleProperty);
+		
 	}
 
 	@Test
 	public void testGetUnitCost() {
-		fail("Not yet implemented");
+		InvoiceRow instance = new InvoiceRow();
+		instance.setUnitCost(12.55);
+		assertEquals(12.55, instance.getUnitCost(),0.1);
 	}
 
-	@Test
-	public void testSetUnitCostDouble() {
-		fail("Not yet implemented");
-	}
+
 
 }
