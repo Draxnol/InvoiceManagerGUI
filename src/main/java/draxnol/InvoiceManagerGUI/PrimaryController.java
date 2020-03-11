@@ -26,6 +26,7 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
@@ -85,7 +86,10 @@ public class PrimaryController {
 
 	@FXML
 	private Button btnSave;
-
+	
+	@FXML
+	private Button btnUserProfile;
+	
 	@FXML
 	private Button btnLoadDB;
 
@@ -284,5 +288,11 @@ public class PrimaryController {
 				System.out.println(e + "throw a selection error at somepoint");
 			}
 		}
+	}
+	
+	@FXML
+	private void userProfile() {
+
+		
 	}
 }

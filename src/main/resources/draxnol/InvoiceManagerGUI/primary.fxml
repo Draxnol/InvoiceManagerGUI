@@ -159,11 +159,11 @@
                         <Label text="Date" GridPane.columnIndex="8" />
                         <Label text="Invoice Number" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="2" />
                         <TextField fx:id="textFieldInvoiceNumber" editable="false" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                        <Button fx:id="btnLoadDB" mnemonicParsing="false" onAction="#loadDB" text="Button" GridPane.rowIndex="5" />
+                        <Button fx:id="btnUserProfile" mnemonicParsing="false" onAction="#userProfile" prefHeight="25.0" prefWidth="88.0" text="User Profile" GridPane.columnSpan="2" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
-                  <Button fx:id="btnNewRow" layoutX="510.0" layoutY="301.0" mnemonicParsing="false" text="New Row" onAction="#addNewRow"/>
-                  <Button fx:id="btnDeleteRow" layoutX="510.0" layoutY="336.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="Del Row" onAction="#deleteSelectedRow"/>
+                  <Button fx:id="btnNewRow" layoutX="510.0" layoutY="301.0" mnemonicParsing="false" onAction="#addNewRow" text="New Row" />
+                  <Button fx:id="btnDeleteRow" layoutX="510.0" layoutY="336.0" mnemonicParsing="false" onAction="#deleteSelectedRow" prefHeight="25.0" prefWidth="67.0" text="Del Row" />
                   <Button fx:id="btnSave" layoutX="510.0" layoutY="477.0" mnemonicParsing="false" onAction="#saveSelectedInvoice" prefHeight="25.0" prefWidth="64.0" text="Save" />
           </children>
         </AnchorPane>
