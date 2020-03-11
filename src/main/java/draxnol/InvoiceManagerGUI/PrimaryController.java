@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import draxnol.contact.Contact;
 import draxnol.contact.ContactDAO;
-import draxnol.contact.ContactManager;
 import draxnol.database.utilDAO;
 import draxnol.invoice.Invoice;
 import draxnol.invoice.InvoiceDAO;
@@ -135,7 +134,7 @@ public class PrimaryController {
 		tableViewInvoiceTable.getColumns().addAll(unitInfoCol, unitDescCol, unitCostCol);
 
 		/* Selected contact label */
-		labelSelectedContact.textProperty().bind(ContactManager.getInstance().contactLabel);
+		labelSelectedContact.textProperty().bind(InvoiceManagerHelper.getInstance().contactLabel);
 
 		/* Action fires when contact is changed */
 		labelSelectedContact.textProperty().addListener(new ChangeListener<String>() {
@@ -181,14 +180,14 @@ public class PrimaryController {
 
 	/* Support functions */
 	private void populateGUI() {
-		Contact currentContact = ContactManager.getInstance().getContact();
+		Contact currentContact = InvoiceManagerHelper.getInstance().getContact();
 		textFieldBillTo.setText(currentContact.getContactBillingAddress());
 
 	}
 
 	private void loadSelectedContactInvoices() {
 		System.out.println("Contact changed");
-		int contactID = ContactManager.getInstance().getContact().getContactID();
+		int contactID = InvoiceManagerHelper.getInstance().getContact().getContactID();
 		try {
 			invoicesListView.setItems(InvoiceDAO.loadSelectedContactInvoices(contactID));
 		} catch (SQLException e) {
@@ -219,11 +218,11 @@ public class PrimaryController {
 	/* Invoice related buttons */
 	@FXML
 	private void addNewInvoice() {
-		if (ContactManager.getInstance().getContact() != null) {
-			int invoiceCount = ContactManager.getInstance().getContact().getContactInvoiceCount();
+		if (InvoiceManagerHelper.getInstance().getContact() != null) {
+			int invoiceCount = InvoiceManagerHelper.getInstance().getContact().getContactInvoiceCount();
 			invoicesListView.getItems()
-					.add(new Invoice(invoiceCount, ContactManager.getInstance().getContact().getContactID()));
-			ContactManager.getInstance().getContact().incrementInvoiceCount();
+					.add(new Invoice(invoiceCount, InvoiceManagerHelper.getInstance().getContact().getContactID()));
+			InvoiceManagerHelper.getInstance().getContact().incrementInvoiceCount();
 		}
 	}
 
@@ -233,7 +232,7 @@ public class PrimaryController {
 		try {
 
 			invoicesListView.getItems().remove(currentSelectionIndex);
-			ContactManager.getInstance().getContact().decrementInvoiceCount();
+			InvoiceManagerHelper.getInstance().getContact().decrementInvoiceCount();
 
 		} catch (IndexOutOfBoundsException e) {
 			System.out.println(e);
@@ -270,14 +269,14 @@ public class PrimaryController {
 
 	@FXML
 	private void addNewRow() {
-		if (ContactManager.getInstance().getContact() != null)
+		if (InvoiceManagerHelper.getInstance().getContact() != null)
 			tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0));
 
 	}
 
 	@FXML
 	private void deleteSelectedRow() {
-		if (ContactManager.getInstance().getContact() != null) {
+		if (InvoiceManagerHelper.getInstance().getContact() != null) {
 			int selectedIndex = tableViewInvoiceTable.getSelectionModel().getSelectedIndex();
 
 			try {

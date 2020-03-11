@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import draxnol.contact.Contact;
 import draxnol.contact.Contact.ContactStatus;
 import draxnol.contact.ContactDAO;
-import draxnol.contact.ContactManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
@@ -105,8 +104,8 @@ public class ContactManagerController {
 		int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
 		Contact selectedContact = contactListView.getItems().get(selectedIndex);
 		System.out.println(selectedContact);
-		ContactManager.getInstance().setContact(selectedContact);
-		ContactManager.getInstance().updateLabel();
+		InvoiceManagerHelper.getInstance().setContact(selectedContact);
+		InvoiceManagerHelper.getInstance().updateLabel();
 		Stage stage = (Stage) btnSelect.getScene().getWindow();
 		stage.close();
 	}
