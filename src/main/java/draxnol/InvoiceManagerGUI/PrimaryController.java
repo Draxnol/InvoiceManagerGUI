@@ -15,7 +15,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -85,10 +88,10 @@ public class PrimaryController {
 
 	@FXML
 	private Button btnSave;
-	
+
 	@FXML
 	private Button btnUserProfile;
-	
+
 	@FXML
 	private Button btnLoadDB;
 
@@ -100,8 +103,7 @@ public class PrimaryController {
 
 	@FXML
 	private void initialize() {
-		
-		
+
 		/* Invoice table view */
 		tableViewInvoiceTable.setEditable(true);
 		TableColumn<InvoiceRow, String> unitInfoCol = new TableColumn<>("unit");
@@ -202,13 +204,20 @@ public class PrimaryController {
 	/* Contact Manager */
 	@FXML
 	private void openContactManager() throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
-		Scene ContactManagerScene = new Scene(fxmlLoader.load());
-		Stage contactStage = new Stage();
-		contactStage.setTitle("Contact Manager");
-		contactStage.setScene(ContactManagerScene);
-		contactStage.show();
-
+		if (InvoiceManagerHelper.getInstance().getProfile() != null) {
+			FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
+			Scene ContactManagerScene = new Scene(fxmlLoader.load());
+			Stage contactStage = new Stage();
+			contactStage.setTitle("Contact Manager");
+			contactStage.setScene(ContactManagerScene);
+			contactStage.show();
+		}else {
+			Alert alert = new Alert(AlertType.INFORMATION); 
+			alert.setHeaderText("Please select a profile");
+			alert.showAndWait()
+		      .filter(response -> response == ButtonType.OK)
+		      .ifPresent(response -> formatSystem());
+		}
 	}
 
 	/* Debug button */
@@ -290,8 +299,13 @@ public class PrimaryController {
 			}
 		}
 	}
-	
-	/*Profile Manager*/
+
+	private Object formatSystem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* Profile Manager */
 	@FXML
 	private void openProfileManager() {
 		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("profileManager.fxml"));
@@ -309,5 +323,5 @@ public class PrimaryController {
 		}
 
 	}
-	
+
 }

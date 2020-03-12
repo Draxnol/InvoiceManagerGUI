@@ -8,7 +8,10 @@ import draxnol.profile.Profile;
 import draxnol.profile.Profile.ProfileStatus;
 import draxnol.profile.ProfileDAO;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -124,28 +127,56 @@ public class ProfileManagerController {
     
     @FXML
     private void selectProfile() {
-    	int selectedIndex = listViewProfile.getSelectionModel().getSelectedIndex();
-    	Profile selectedProfile = listViewProfile.getItems().get(selectedIndex);
-    	InvoiceManagerHelper.getInstance().setProfile(selectedProfile);
-    	InvoiceManagerHelper.getInstance().setContact(null);
-    	
-    	Stage stage = (Stage) btnSelect.getScene().getWindow();
-		stage.close();
+    	try {
+    		InvoiceManagerHelper.getInstance().setProfile(getSelectedProfile());
+    		InvoiceManagerHelper.getInstance().setContact(null);
+        	Stage stage = (Stage) btnSelect.getScene().getWindow();
+    		stage.close();
+    	}catch(NullPointerException e) {
+    		Alert alert = new Alert(AlertType.INFORMATION);
+    		alert.setHeaderText("No profile selected");
+    		alert.showAndWait().ifPresent(response -> {
+    		     if (response == ButtonType.OK) {
+    		         
+    		     }
+    		     
+    		 });
+    	}
+
     	
     }
     @FXML
     private void deleteProfile() {
-    	int selectedIndex = listViewProfile.getSelectionModel().getSelectedIndex();
-    	Profile selectedProfile = listViewProfile.getItems().get(selectedIndex);
+
     	
     	try {
-    		ProfileDAO.deleteProfile(selectedProfile);
-    		listViewProfile.getItems().remove(selectedIndex);
+    		ProfileDAO.deleteProfile(getSelectedProfile());
+    		listViewProfile.getItems().remove(getSelectedProfile());
     	}catch(SQLException e) {
     		e.printStackTrace();
+    	}catch(NullPointerException e) {
+    		Alert alert = new Alert(AlertType.INFORMATION);
+    		alert.setHeaderText("No profile selected");
+    		alert.showAndWait().ifPresent(response -> {
+    		     if (response == ButtonType.OK) {
+    		         
+    		     }
+    		     
+    		 });
     	}
     }
     
-    
+    private Profile getSelectedProfile() {
+    	try {
+    		int selectedIndex = listViewProfile.getSelectionModel().getSelectedIndex();
+    		Profile selectedProfile = listViewProfile.getItems().get(selectedIndex);
+    		return selectedProfile;
+    	}catch(IndexOutOfBoundsException e) {
+    		
+    		return null;
+    	}
+    	
+    	
+    }
     
 }
