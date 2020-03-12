@@ -105,8 +105,7 @@ public class ContactDAO {
 	}
 
 	public static void updateContactInvoiceCount() {
-		// TODO Auto-generated method stub
-
+	
 	}
 
 }

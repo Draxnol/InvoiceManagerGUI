@@ -3,7 +3,7 @@ package draxnol.profile;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.sql.PreparedStatement;
 import draxnol.database.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -76,7 +76,22 @@ public class ProfileDAO {
 	}
 
 	public static void updateProfile(Profile selectedProfile) {
-		// TODO Auto-generated method stub
+		String sql = "UPDATE profiles set profileName = ? ,"
+				+ "profileAddress = ?, "
+				+ "profileHeader = ?";
+		DatabaseConnection.dbConnect();
+		try {
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setString(1, selectedProfile.getProfileName());
+			pstmt.setString(2, selectedProfile.getProfileAddress());
+			pstmt.setString(3, selectedProfile.getProfileHeader());
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 	
