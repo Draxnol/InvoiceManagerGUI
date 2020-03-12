@@ -13,6 +13,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class ProfileManagerController {
 
@@ -123,6 +124,13 @@ public class ProfileManagerController {
     
     @FXML
     private void selectProfile() {
+    	int selectedIndex = listViewProfile.getSelectionModel().getSelectedIndex();
+    	Profile selectedProfile = listViewProfile.getItems().get(selectedIndex);
+    	InvoiceManagerHelper.getInstance().setProfile(selectedProfile);
+    	InvoiceManagerHelper.getInstance().setContact(null);
+    	
+    	Stage stage = (Stage) btnSelect.getScene().getWindow();
+		stage.close();
     	
     }
     @FXML

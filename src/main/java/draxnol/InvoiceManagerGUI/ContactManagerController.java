@@ -55,6 +55,7 @@ public class ContactManagerController {
 	private void initialize() throws SQLException {
 
 		System.out.println("Initialize method");
+		System.out.println("Current profile is " + InvoiceManagerHelper.getInstance().getProfile());
 		System.out.println(ContactDAO.loadAllContactsDB());
 		contactListView.setItems(ContactDAO.loadAllContactsDB());
 		contactListView.setCellFactory(param -> new ListCell<Contact>() {
@@ -128,6 +129,7 @@ public class ContactManagerController {
 		// TODO Input validation
 		int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
 		Contact selectedContact = contactListView.getItems().get(selectedIndex);
+		selectedContact.setProfileID(InvoiceManagerHelper.getInstance().getProfile().getProfileID());
 		selectedContact.setContactAlias(textFieldAlias.getText());
 		selectedContact.setContactName(textFieldContactName.getText());
 		selectedContact.setContactInvoiceCount(Integer.valueOf(textFieldCount.getText()));

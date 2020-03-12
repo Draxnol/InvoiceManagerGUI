@@ -6,14 +6,19 @@ public class utilDAO {
 
 	public static void createContactTable() {
 		String sqlString = "CREATE TABLE IF NOT EXISTS contacts (\n"
-				+ "		contactID integer PRIMARY KEY, \n"
+				+ "profileID integer NOT NULL, \n"
+				+ "contactID integer PRIMARY KEY, \n"
 				+ "		contactInvoiceCount integer NOT NULL,\n"	
 				+ "		contactName text NOT NULL, \n"
 				+ "		contactAlias text NOT NULL, \n"
 				+ "		contactBillingAddress text NOT NULL,"
 				+ "		contactBusinessNumber text,"
 				+ "		contactPhoneNumber text,"
-				+ "		contactEmailAddress text"
+				+ "		contactEmailAddress text,"
+				+ "     FOREIGN KEY(profileID)\n"
+				+ "		REFERENCES profiles(profileID)\n"
+				+ "		ON DELETE CASECADE\n"
+				+ "		ON UPDATE ACTION)"
 				+ ");";			
 		try {
 			DatabaseConnection.updateDBStructure(sqlString);

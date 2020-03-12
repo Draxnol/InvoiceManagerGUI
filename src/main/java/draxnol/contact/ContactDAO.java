@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import draxnol.InvoiceManagerGUI.InvoiceManagerHelper;
 import draxnol.database.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +12,7 @@ import javafx.collections.ObservableList;
 public class ContactDAO {
 	public static ObservableList<Contact> loadAllContactsDB() throws SQLException {
 		System.out.println("Loading contacts....");
-		String sql = "SELECT * FROM contacts;";
+		String sql = "SELECT * FROM contacts where profileID = " + InvoiceManagerHelper.getInstance().getProfile().getProfileID();
 		try {
 			ResultSet rs = DatabaseConnection.dbQuery(sql);
 			ObservableList<Contact> contactList = getContactObList(rs);
@@ -49,8 +50,9 @@ public class ContactDAO {
 	}
 
 	public static void insertNewContact(Contact contact) throws SQLException {
-		String sql = "INSERT INTO contacts(contactInvoiceCount,contactName,contactAlias,contactBillingAddress,contactBusinessNumber,contactPhoneNumber,contactEmailAddress) VALUES("
-				+ "" + contact.getContactInvoiceCount() + ",'" + contact.getContactName() + "','"
+		String sql = "INSERT INTO contacts(profileID, contactInvoiceCount,contactName,contactAlias,contactBillingAddress,contactBusinessNumber,contactPhoneNumber,contactEmailAddress) VALUES("
+				+ "" + contact.getProfileID()
+				+ "," + contact.getContactInvoiceCount() + ",'" + contact.getContactName() + "','"
 				+ contact.getContactAlias() + "','" + contact.getContactBillingAddress() + "','"
 				+ contact.getContactBusinessNumber() + "','" + contact.getContactPhoneNumber() + "','"
 				+ contact.getContactEmailAddress() + "')" + ";";
