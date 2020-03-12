@@ -55,19 +55,16 @@ public class ProfileDAO {
 	}
 	
 	public static void insertNewProfile(Profile profile) {
-		String sql = "INSERT INTO profiles(profileName, profileAddress, profileHeader, profileInvoiceCount) VALUES ('"
-				+profile.getProfileName() +"', '"
-						+ profile.getProfileAddress()
-						+ "', '"
-						+ profile.getProfileHeader()
-						+ "'," + profile.getProfileInvoiceCount()
-						+ ");";
-	
+		String sql = "INSERT INTO profiles(profileName, profileAddress, profileHeader, profileInvoiceCount) VALUES (?,?,?,?)";		
 		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
-			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setString(1, profile.getProfileName());
+			pstmt.setString(2, profile.getProfileAddress());
+			pstmt.setString(3, profile.getProfileHeader());
+			pstmt.setInt(4, profile.getProfileInvoiceCount());
+			pstmt.execute();
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -79,8 +76,9 @@ public class ProfileDAO {
 		String sql = "UPDATE profiles set profileName = ? ,"
 				+ "profileAddress = ?, "
 				+ "profileHeader = ?";
-		DatabaseConnection.dbConnect();
+		
 		try {
+			DatabaseConnection.dbConnect();
 			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
 			pstmt.setString(1, selectedProfile.getProfileName());
 			pstmt.setString(2, selectedProfile.getProfileAddress());
@@ -96,11 +94,12 @@ public class ProfileDAO {
 	}
 	
 	public static void deleteProfile(Profile selectedProfile) throws SQLException{
-		String sql = "DELETE FROM profiles WHERE profileID = " +selectedProfile.getProfileID();
+		String sql = "DELETE FROM profiles WHERE profileID = ?";
 		try {
 			DatabaseConnection.dbConnect();
-			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1,selectedProfile.getProfileID());
+			pstmt.execute();
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

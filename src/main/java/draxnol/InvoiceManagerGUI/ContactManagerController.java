@@ -6,7 +6,10 @@ import draxnol.contact.Contact;
 import draxnol.contact.Contact.ContactStatus;
 import draxnol.contact.ContactDAO;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -102,62 +105,87 @@ public class ContactManagerController {
 
 	@FXML
 	private void selectContact() {
-		int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
-		Contact selectedContact = contactListView.getItems().get(selectedIndex);
-		System.out.println(selectedContact);
-		InvoiceManagerHelper.getInstance().setContact(selectedContact);
-		InvoiceManagerHelper.getInstance().updateLabel();
-		Stage stage = (Stage) btnSelect.getScene().getWindow();
-		stage.close();
+		
+		
+		try {
+			InvoiceManagerHelper.getInstance().setContact(getSelectedContact());
+			InvoiceManagerHelper.getInstance().updateLabel();
+			Stage stage = (Stage) btnSelect.getScene().getWindow();
+			stage.close();
+		} catch (NullPointerException e) {
+			noContactSelectedAlert();
+			
+		}
 	}
 
 	@FXML
 	private void deleteContact() {
-		int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
-		Contact selectedContact = contactListView.getItems().get(selectedIndex);
+
 		try {
-			ContactDAO.deleteContact(selectedContact);
-			contactListView.getItems().remove(selectedIndex);
+			ContactDAO.deleteContact(getSelectedContact());
+			contactListView.getItems().remove(getSelectedContact());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
+		}catch(NullPointerException e) {
+			noContactSelectedAlert();
 		}
 	}
 
 	@FXML
 	private void saveContact() {
 		// TODO Input validation
-		int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
-		Contact selectedContact = contactListView.getItems().get(selectedIndex);
-		selectedContact.setProfileID(InvoiceManagerHelper.getInstance().getProfile().getProfileID());
-		selectedContact.setContactAlias(textFieldAlias.getText());
-		selectedContact.setContactName(textFieldContactName.getText());
-		selectedContact.setContactInvoiceCount(Integer.valueOf(textFieldCount.getText()));
-		selectedContact.setContactPhoneNumber(textFieldPhoneNumber.getText());
-		selectedContact.setContactEmailAddress(textFieldEmail.getText());
-		selectedContact.setContactBusinessNumber(textFieldContactBusinessNumber.getText());
-		selectedContact.setContactBillingAddress(textAreaBillingAddress.getText());
-		if (selectedContact.status == ContactStatus.NEW) {
+		try {
+			Contact selectedContact = getSelectedContact();
+			selectedContact.setProfileID(InvoiceManagerHelper.getInstance().getProfile().getProfileID());
+			selectedContact.setContactAlias(textFieldAlias.getText());
+			selectedContact.setContactName(textFieldContactName.getText());
+			selectedContact.setContactInvoiceCount(Integer.valueOf(textFieldCount.getText()));
+			selectedContact.setContactPhoneNumber(textFieldPhoneNumber.getText());
+			selectedContact.setContactEmailAddress(textFieldEmail.getText());
+			selectedContact.setContactBusinessNumber(textFieldContactBusinessNumber.getText());
+			selectedContact.setContactBillingAddress(textAreaBillingAddress.getText());
+			if (selectedContact.status == ContactStatus.NEW) {
+
+				try {
+					selectedContact.status = ContactStatus.CREATED;
+					ContactDAO.insertNewContact(selectedContact);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				ContactDAO.updateContact(selectedContact);
+			}
+
+			System.out.println("Updating db");
 
 			try {
-				selectedContact.status = ContactStatus.CREATED;
-				ContactDAO.insertNewContact(selectedContact);
+				contactListView.setItems(ContactDAO.loadAllContactsDB());
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else {
-			ContactDAO.updateContact(selectedContact);
+		} catch (NullPointerException e) {
+			noContactSelectedAlert();
 		}
-
-		System.out.println("Updating db");
-
+	}
+	private Contact getSelectedContact() {
 		try {
-			contactListView.setItems(ContactDAO.loadAllContactsDB());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
+			Contact selectedContact = contactListView.getItems().get(selectedIndex);
+			return selectedContact;
+		} catch (Exception e) {
+			return null;
 		}
+	}
+	
+	private void noContactSelectedAlert() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText("No contact selected"); 
+		alert.showAndWait()
+	      .filter(response -> response == ButtonType.OK);
+	 
 	}
 
 }
