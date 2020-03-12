@@ -13,6 +13,7 @@ public class Contact {
 	}
 	
 	public ContactStatus status;
+	private int profileID;
 	private SimpleIntegerProperty contactID;
 	private SimpleIntegerProperty contactInvoiceCount;
 	private SimpleStringProperty contactName;
@@ -21,7 +22,7 @@ public class Contact {
 	private SimpleStringProperty contactPhoneNumber;
 	private SimpleStringProperty contactBusinessNumber;
 	private SimpleStringProperty contactEmailAddress;
-
+	
 	
 
 	public Contact() {
@@ -35,6 +36,16 @@ public class Contact {
 		contactEmailAddress = new SimpleStringProperty();
 	}
 
+	
+	/*Profile ID*/
+	public void setProfileID(int id){
+		this.profileID = id;
+	}
+	
+	public int getProfileID() {
+		return profileID;
+	}
+	
 	/* Invoice ID */
 	public void setContactID(int value) {
 		this.contactID.set(value);

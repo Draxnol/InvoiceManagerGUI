@@ -1,5 +1,6 @@
 package draxnol.profile;
 
+
 import javafx.beans.property.SimpleStringProperty;
 
 public class Profile{
@@ -8,13 +9,19 @@ public class Profile{
 	int profileInvoiceCount;
 	SimpleStringProperty profileName;
 	SimpleStringProperty profileAddress;
-	
+	SimpleStringProperty profileHeader;
+	public ProfileStatus status;
+	public enum ProfileStatus{
+		NEW,
+		CREATED
+	}
 	
 	
 	
 	public Profile() {
 		profileName = new SimpleStringProperty();
 		profileAddress = new SimpleStringProperty();
+		profileHeader = new SimpleStringProperty();
 	}
 
 
@@ -91,6 +98,37 @@ public class Profile{
 	public void setProfileAddress(final String profileAddress) {
 		this.profileAddressProperty().set(profileAddress);
 	}
+
+
+
+
+	public SimpleStringProperty profileHeaderProperty() {
+		return this.profileHeader;
+	}
+	
+
+
+
+
+	public String getProfileHeader() {
+		return this.profileHeaderProperty().get();
+	}
+	
+
+
+
+
+	public void setProfileHeader(final String profileHeader) {
+		this.profileHeaderProperty().set(profileHeader);
+	}
+
+
+
+
+	public String getProfileSummary() {
+		return "Name:" + getProfileName();
+	}
+	
 	
 	
 	

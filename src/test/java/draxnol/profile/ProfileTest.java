@@ -11,6 +11,21 @@ public class ProfileTest {
 	public void setUp() throws Exception {
 	}
 
+	
+	@Test
+	public void testSetProfileHeaderProperty() {
+		Profile instance = new Profile();
+		instance.profileHeaderProperty().set("hi");
+		assertEquals("hi", instance.profileHeaderProperty().get());
+	}
+	
+	@Test
+	public void testSetProfileHeader() {
+		Profile instance = new Profile();
+		instance.setProfileHeader("hello");
+		assertEquals("hello", instance.getProfileHeader());
+	}
+	
 	@Test
 	public void testGetProfileID() {
 		Profile instance = new Profile();

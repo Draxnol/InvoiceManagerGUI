@@ -100,6 +100,8 @@ public class PrimaryController {
 
 	@FXML
 	private void initialize() {
+		
+		
 		/* Invoice table view */
 		tableViewInvoiceTable.setEditable(true);
 		TableColumn<InvoiceRow, String> unitInfoCol = new TableColumn<>("unit");
@@ -289,9 +291,23 @@ public class PrimaryController {
 		}
 	}
 	
+	/*Profile Manager*/
 	@FXML
-	private void userProfile() {
+	private void openProfileManager() {
+		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("profileManager.fxml"));
+		Scene profileScene;
+		try {
+			profileScene = new Scene(fxmlLoader.load());
+			Stage profileStage = new Stage();
+			profileStage.setTitle("Profile Manager");
+			profileStage.setScene(profileScene);
+			profileStage.show();
 
-		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
+	
 }

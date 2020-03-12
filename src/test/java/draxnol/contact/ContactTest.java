@@ -16,6 +16,13 @@ public class ContactTest {
 	}
 
 	@Test
+	public void testSetProfileId() {
+		Contact instance = new Contact();
+		instance.setProfileID(5);
+		assertEquals(5, instance.getProfileID());
+	}
+	
+	@Test
 	public void testSetContactID() {
 		Contact instance = new Contact();
 		instance.setContactID(5);

@@ -66,6 +66,21 @@ public class utilDAO {
 			e.printStackTrace();
 		}
 }
-
+	public static void createProfileTable() {
+		String sqlString = "CREATE TABLE IF NOT EXISTS profiles(\n"
+				+ "profileID INTEGER PRIMARY KEY, \n"
+				+ "profileName TEXT NOT NULL,"
+				+ "profileHeader TEXT NOT NULL,"
+				+ "profileAddress TEXT NOT NULL,"
+				+ "profileInvoiceCount INTEGER NOT NULL"
+				+ ");";
+		
+		try {
+			DatabaseConnection.updateDBStructure(sqlString);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

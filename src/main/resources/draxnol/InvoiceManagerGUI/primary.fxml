@@ -159,7 +159,7 @@
                         <Label text="Date" GridPane.columnIndex="8" />
                         <Label text="Invoice Number" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="2" />
                         <TextField fx:id="textFieldInvoiceNumber" editable="false" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                        <Button fx:id="btnUserProfile" mnemonicParsing="false" onAction="#userProfile" prefHeight="25.0" prefWidth="88.0" text="User Profile" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                        <Button fx:id="btnUserProfile" mnemonicParsing="false" onAction="#openProfileManager" prefHeight="25.0" prefWidth="88.0" text="User Profile" GridPane.columnSpan="2" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                   <Button fx:id="btnNewRow" layoutX="510.0" layoutY="301.0" mnemonicParsing="false" onAction="#addNewRow" text="New Row" />
