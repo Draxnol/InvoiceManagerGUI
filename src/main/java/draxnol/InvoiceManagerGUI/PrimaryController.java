@@ -2,6 +2,8 @@ package draxnol.InvoiceManagerGUI;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import draxnol.contact.Contact;
 import draxnol.contact.ContactDAO;
@@ -34,6 +36,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 
 public class PrimaryController {
@@ -104,6 +107,8 @@ public class PrimaryController {
 	@FXML
 	private Color x4;
 
+	private final String datePattern = "yyyy-MM-dd";
+	
 	@FXML
 	private void initialize() {
 
@@ -148,6 +153,7 @@ public class PrimaryController {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if (InvoiceManagerHelper.getInstance().profileChanged != true) {
+					clearGUI();
 					loadSelectedContactInvoices();
 					populateGUI();
 				}
@@ -155,14 +161,14 @@ public class PrimaryController {
 			}
 
 		});
-		boolean profileChanged;
+		
 		labelSelectedProfile.textProperty().bind(InvoiceManagerHelper.getInstance().profileLabel);
 		labelSelectedProfile.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				System.out.println("profile changed");
 				textFieldBillingPayable.setText(InvoiceManagerHelper.getInstance().getProfile().getProfileAddress());
-				clearInvoiceView();
+				clearGUI();
 				
 			}
 		});
@@ -192,13 +198,40 @@ public class PrimaryController {
 				currentInvoice.setInvoiceRow(InvoiceDAO.loadInvoiceRows(currentInvoice));
 				System.out.println(currentInvoice.getInvoiceRows());
 				tableViewInvoiceTable.setItems(currentInvoice.getInvoiceRows());
-			} catch (IndexOutOfBoundsException | SQLException e) {
+			} catch (IndexOutOfBoundsException | SQLException | NullPointerException e) {
 				System.out.println(e);
 			}
 		});
 
+	
+        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter = 
+                DateTimeFormatter.ofPattern(datePattern);
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+	
+        dateFieldDate.setConverter(converter);
+        dateFieldDate.setPromptText(datePattern.toLowerCase());
 	}
 
+	
+	
+	
 	/* Support functions */
 	private void populateGUI() {
 		Contact currentContact = InvoiceManagerHelper.getInstance().getContact();
@@ -218,16 +251,19 @@ public class PrimaryController {
 
 	}
 	
-	public void clearInvoiceView() {
+	public void clearGUI() {
 		invoicesListView.setItems(null);
-		InvoiceManagerHelper.getInstance().resetContactLabel();
+		tableViewInvoiceTable.setItems(null);
+		textFieldBillTo.setText("");
+		dateFieldDate.getEditor().setText("");
+		textFieldInvoiceNumber.setText("");
 	}
 
 	/* Contact Manager */
 	@FXML
 	private void openContactManager() throws IOException {
 		if (InvoiceManagerHelper.getInstance().getProfile() != null) {
-			InvoiceManagerHelper.getInstance().profileChanged = false;
+			
 			FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
 			Scene ContactManagerScene = new Scene(fxmlLoader.load());
 			Stage contactStage = new Stage();
@@ -279,7 +315,10 @@ public class PrimaryController {
 		int currentSelectionIndex = invoicesListView.getSelectionModel().getSelectedIndex();
 		try {
 			Invoice selectedInvoice = invoicesListView.getItems().get(currentSelectionIndex);
-			selectedInvoice.setDate(dateFieldDate.getEditor().getText());
+
+			if(dateFieldDate.getEditor().getText() == null){
+				selectedInvoice.setDate(java.time.LocalDate.now().toString());
+			}
 			selectedInvoice.setInvoiceBillingAddress(textFieldBillTo.getText());
 			selectedInvoice.setInvoicePayableAddress(textFieldBillingPayable.getText());
 
@@ -331,7 +370,8 @@ public class PrimaryController {
 	/* Profile Manager */
 	@FXML
 	private void openProfileManager() {
-		InvoiceManagerHelper.getInstance().profileChanged = true;
+		
+		
 		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("profileManager.fxml"));
 		Scene profileScene;
 		try {

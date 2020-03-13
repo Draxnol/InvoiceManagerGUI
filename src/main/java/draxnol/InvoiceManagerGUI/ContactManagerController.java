@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import draxnol.contact.Contact;
 import draxnol.contact.Contact.ContactStatus;
 import draxnol.contact.ContactDAO;
+import draxnol.invoice.InvoiceDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -123,6 +124,7 @@ public class ContactManagerController {
 
 		try {
 			ContactDAO.deleteContact(getSelectedContact());
+			InvoiceDAO.deleteInvoiceByContactID(getSelectedContact());
 			contactListView.getItems().remove(getSelectedContact());
 		} catch (SQLException e) {
 			
@@ -187,5 +189,8 @@ public class ContactManagerController {
 	      .filter(response -> response == ButtonType.OK);
 	 
 	}
+	
+	
+	
 
 }

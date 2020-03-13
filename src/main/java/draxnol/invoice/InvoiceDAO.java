@@ -216,5 +216,20 @@ public class InvoiceDAO {
 			e.printStackTrace();
 		}
 	}
+
+	public static void deleteInvoiceByContactID(Contact selectedContact) {
+		String sql = "DELETE FROM invoices WHERE contactID = ?";
+		
+		try {
+			DatabaseConnection.dbConnect();
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1, selectedContact.getContactID());			
+			pstmt.execute();			
+			DatabaseConnection.dbDisconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }
