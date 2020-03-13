@@ -123,7 +123,8 @@ public class ProfileManagerController {
 	private void selectProfile() {
 		try {
 			InvoiceManagerHelper.getInstance().setProfile(getSelectedProfile());
-			InvoiceManagerHelper.getInstance().setContact(null);
+			InvoiceManagerHelper.getInstance().updateProfileLabel();
+			//InvoiceManagerHelper.getInstance().setContact(null);
 			Stage stage = (Stage) btnSelect.getScene().getWindow();
 			stage.close();
 		} catch (NullPointerException e) {

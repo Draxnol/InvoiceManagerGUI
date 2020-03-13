@@ -90,8 +90,11 @@ public class PrimaryController {
 	private Button btnSave;
 
 	@FXML
-	private Button btnUserProfile;
-
+	private Button btnSelectProfile;
+	
+	@FXML
+	private Label labelSelectedProfile;
+	
 	@FXML
 	private Button btnLoadDB;
 
@@ -144,12 +147,26 @@ public class PrimaryController {
 		labelSelectedContact.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				loadSelectedContactInvoices();
-				populateGUI();
+				if (InvoiceManagerHelper.getInstance().profileChanged != true) {
+					loadSelectedContactInvoices();
+					populateGUI();
+				}
 
 			}
 
 		});
+		boolean profileChanged;
+		labelSelectedProfile.textProperty().bind(InvoiceManagerHelper.getInstance().profileLabel);
+		labelSelectedProfile.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				System.out.println("profile changed");
+				textFieldBillingPayable.setText(InvoiceManagerHelper.getInstance().getProfile().getProfileAddress());
+				clearInvoiceView();
+				
+			}
+		});
+		
 		/* invoice list view */
 		invoicesListView.setCellFactory(param -> new ListCell<Invoice>() {
 			@Override
@@ -200,11 +217,17 @@ public class PrimaryController {
 		}
 
 	}
+	
+	public void clearInvoiceView() {
+		invoicesListView.setItems(null);
+		InvoiceManagerHelper.getInstance().resetContactLabel();
+	}
 
 	/* Contact Manager */
 	@FXML
 	private void openContactManager() throws IOException {
 		if (InvoiceManagerHelper.getInstance().getProfile() != null) {
+			InvoiceManagerHelper.getInstance().profileChanged = false;
 			FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
 			Scene ContactManagerScene = new Scene(fxmlLoader.load());
 			Stage contactStage = new Stage();
@@ -308,6 +331,7 @@ public class PrimaryController {
 	/* Profile Manager */
 	@FXML
 	private void openProfileManager() {
+		InvoiceManagerHelper.getInstance().profileChanged = true;
 		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("profileManager.fxml"));
 		Scene profileScene;
 		try {

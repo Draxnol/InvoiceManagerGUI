@@ -109,7 +109,7 @@ public class ContactManagerController {
 		
 		try {
 			InvoiceManagerHelper.getInstance().setContact(getSelectedContact());
-			InvoiceManagerHelper.getInstance().updateLabel();
+			InvoiceManagerHelper.getInstance().updateContactLabel();
 			Stage stage = (Stage) btnSelect.getScene().getWindow();
 			stage.close();
 		} catch (NullPointerException e) {
