@@ -1,5 +1,6 @@
 package draxnol.invoice;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,10 +15,12 @@ import javafx.collections.ObservableList;
 public class InvoiceDAO {
 
 	public static ObservableList<Invoice> loadSelectedContactInvoices(int contactID) throws SQLException {
-		System.out.println("Loading contacts....");
-		String sql = "SELECT * FROM invoices WHERE contactID = "+ contactID +";";
+		String sql = "SELECT * FROM invoices WHERE contactID = ?";
 		try {
-			ResultSet rs = DatabaseConnection.dbQuery(sql);
+			DatabaseConnection.dbConnect();
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1, contactID);
+			ResultSet rs = pstmt.executeQuery();
 			ObservableList<Invoice> contactList = getInvoiceObList(rs);
 			DatabaseConnection.dbDisconnect();
 			rs.close();
@@ -54,32 +57,41 @@ public class InvoiceDAO {
 
 	
 	public static void saveRows(ObservableList<InvoiceRow> invoiceRows, int invoiceID) {
-		//TODO Use prepared statements
+		
 		
 		
 		int rowNumber = invoiceRows.size() + 1;
 		String sql;
 		System.out.println("invoiceID is " + invoiceID);
+		
+		
 		for(InvoiceRow row : invoiceRows) {
-			if(row.getInvoiceRowStatus() == InvoiceRowStatus.NOT_SAVED) {
-				 sql = "INSERT INTO invoiceRows\n" + 
-					"(invoiceID, rowNumber, unitInfo, unitDesc, unitCost)\n" + 
-					"VALUES("+ invoiceID + "," + rowNumber + "," + "'"+row.getUnitInfo() +"','" + row.getUnitDesc()+ "'," + 0 + ");\n" + 
-					"";
-			}else {
-				 sql = "UPDATE invoiceRows "
-				 		+ " set unitInfo = '" + row.getUnitInfo()+ "',"
-				 		+ " unitDesc = '" + row.getUnitDesc() + "'," 
-				 		+ " unitCost = "  + row.getUnitCost() 
-				 		+ " WHERE invoiceID = " + invoiceID
-				 		+ ";";
-			}
-
-			System.out.println(sql);
 			try {
 				DatabaseConnection.dbConnect();
-				Statement stmt = DatabaseConnection.connection.createStatement();
-				stmt.execute(sql);			
+				PreparedStatement pstmt;
+				if(row.getInvoiceRowStatus() == InvoiceRowStatus.NOT_SAVED) {
+					 sql = "INSERT INTO invoiceRows\n" + 
+						"(invoiceID, rowNumber, unitInfo, unitDesc, unitCost)\n" + 
+						"VALUES(?,?,?,?,?)"; 
+					
+					pstmt = DatabaseConnection.connection.prepareStatement(sql);
+					pstmt.setInt(1, invoiceID);
+					pstmt.setInt(2, rowNumber);
+					pstmt.setString(3, row.getUnitInfo());
+					pstmt.setString(4, row.getUnitDesc());
+					pstmt.setDouble(5, row.getUnitCost());
+						
+				
+				}else {
+					sql = "UPDATE invoiceRows "
+					 		+ " set unitInfo = ?, unitDesc = ?, unitCost = ? WHERE invoiceID = ?";
+					pstmt = DatabaseConnection.connection.prepareStatement(sql);
+					pstmt.setString(1, row.getUnitInfo());
+					pstmt.setString(2, row.getUnitDesc());
+					pstmt.setDouble(3, row.getUnitCost());
+					pstmt.setInt(4, invoiceID);
+				}
+				pstmt.execute();			
 				DatabaseConnection.dbDisconnect();
 				rowNumber += 1;
 				System.out.println("SQL EXECUTRED");
@@ -94,16 +106,18 @@ public class InvoiceDAO {
 	
 	public static void updateInvoice(Invoice selectedInvoice) {
 		String sql = "UPDATE invoices "
-				+ "Set payableAddress = '" + selectedInvoice.getInvoicePayableAddress()
-				+ "', billingAddress = '" + selectedInvoice.getInvoiceBillingAddress()
-				+ "', invoiceDateString ='" + selectedInvoice.getInvoiceDateString()
-				+ "' WHERE invoiceID = " + selectedInvoice.getInvoiceID()
-				+ ";";
+				+ "Set payableAddress = ?, billingAddress = ?," 
+				+ "invoiceDateString = ? WHERE invoiceID = ?";
+				
 		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
-			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);			
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setString(1, selectedInvoice.getInvoicePayableAddress());
+			pstmt.setString(2, selectedInvoice.getInvoiceBillingAddress());
+			pstmt.setString(3, selectedInvoice.getInvoiceDateString());
+			pstmt.setInt(4, selectedInvoice.getInvoiceID());
+			pstmt.execute();			
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -114,21 +128,19 @@ public class InvoiceDAO {
 
 	public static void addNewInvoice(Invoice selectedInvoice) {
 		String sql = "INSERT INTO invoices\n" + 
-				"(contactID, invoiceNumber, payableAddress, billingAddress, invoiceDateString, invoiceTotal)\r\n" + 
-				"VALUES("
-				+ "" + selectedInvoice.getContactID() 
-				+"," + selectedInvoice.getInvoiceNumber()
-				+ ",'" + selectedInvoice.getInvoicePayableAddress()
-				+ "','" + selectedInvoice.getInvoiceBillingAddress()
-				+ "','" + selectedInvoice.getInvoiceDateString()
-				+ "'," + 0 
-				+ ")\n" + 
-				";";
+				"(contactID, invoiceNumber, payableAddress, billingAddress, invoiceDateString, invoiceTotal)\r\n"
+				+ "VALUES(?,?,?,?,?,?)" ; 
 		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
-			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);			
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1,selectedInvoice.getContactID());
+			pstmt.setInt(2, selectedInvoice.getInvoiceNumber());
+			pstmt.setString(3, selectedInvoice.getInvoicePayableAddress());
+			pstmt.setString(4, selectedInvoice.getInvoiceBillingAddress());
+			pstmt.setString(5, selectedInvoice.getInvoiceDateString());
+			pstmt.setDouble(6, selectedInvoice.getInvoiceTotal());
+			pstmt.execute();			
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -137,11 +149,12 @@ public class InvoiceDAO {
 	}
 	
 	public static void deleteInvoice(Invoice selectedInvoice) {
-		String sql = "DELETE FROM invoices WHERE invoiceID = " + selectedInvoice.getInvoiceID();
+		String sql = "DELETE FROM invoices WHERE invoiceID = ?";
 		try {
 			DatabaseConnection.dbConnect();
-			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);			
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1,selectedInvoice.getContactID());
+			pstmt.execute();			
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -149,9 +162,12 @@ public class InvoiceDAO {
 		}
 	}
 	public static ObservableList<InvoiceRow> loadInvoiceRows(Invoice SelectedInvoice) throws SQLException {
-		String sql = "SELECT * FROM invoiceRows where invoiceID = " + SelectedInvoice.getInvoiceID();
+		String sql = "SELECT * FROM invoiceRows where invoiceID = ?";
 		try {
-			ResultSet rs = DatabaseConnection.dbQuery(sql);
+			DatabaseConnection.dbConnect();
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1, SelectedInvoice.getInvoiceID());
+			ResultSet rs = pstmt.executeQuery();;
 			ObservableList<InvoiceRow> invoiceRowList = getInvoiceRowsOBList(rs);
 			DatabaseConnection.dbDisconnect();
 			rs.close();
@@ -187,12 +203,13 @@ public class InvoiceDAO {
 	}
 
 	public static void deleteRow(int rowID) {
-		String sql = "DELETE FROM invoiceRows WHERE rowID = " + rowID;
+		String sql = "DELETE FROM invoiceRows WHERE rowID = ?";
 	
 		try {
 			DatabaseConnection.dbConnect();
-			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);			
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1, rowID);			
+			pstmt.execute();			
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
