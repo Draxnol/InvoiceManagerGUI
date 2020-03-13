@@ -1,5 +1,6 @@
 package draxnol.contact;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,9 +13,13 @@ import javafx.collections.ObservableList;
 public class ContactDAO {
 	public static ObservableList<Contact> loadAllContactsDB() throws SQLException {
 		System.out.println("Loading contacts....");
-		String sql = "SELECT * FROM contacts where profileID = " + InvoiceManagerHelper.getInstance().getProfile().getProfileID();
+		String sql = "SELECT * FROM contacts where profileID = ?";
 		try {
-			ResultSet rs = DatabaseConnection.dbQuery(sql);
+			
+			DatabaseConnection.dbConnect();
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1,InvoiceManagerHelper.getInstance().getProfile().getProfileID());
+			ResultSet rs = pstmt.executeQuery();
 			ObservableList<Contact> contactList = getContactObList(rs);
 			DatabaseConnection.dbDisconnect();
 			rs.close();
@@ -50,21 +55,26 @@ public class ContactDAO {
 	}
 
 	public static void insertNewContact(Contact contact) throws SQLException {
-		String sql = "INSERT INTO contacts(profileID, contactInvoiceCount,contactName,contactAlias,contactBillingAddress,contactBusinessNumber,contactPhoneNumber,contactEmailAddress) VALUES("
-				+ "" + contact.getProfileID()
-				+ "," + contact.getContactInvoiceCount() + ",'" + contact.getContactName() + "','"
-				+ contact.getContactAlias() + "','" + contact.getContactBillingAddress() + "','"
-				+ contact.getContactBusinessNumber() + "','" + contact.getContactPhoneNumber() + "','"
-				+ contact.getContactEmailAddress() + "')" + ";";
-		System.out.println(sql);
-		try {
+		String sql = "INSERT INTO contacts("
+				+ "profileID, contactInvoiceCount,contactName,contactAlias,"
+				+ "contactBillingAddress,contactBusinessNumber,contactPhoneNumber"
+				+ ",contactEmailAddress)"
+				+ " VALUES(?,?,?,?,?,?,?,?)";
+		try {		
 			DatabaseConnection.dbConnect();
-			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1, contact.getProfileID());
+			pstmt.setInt(2, contact.getContactInvoiceCount());
+			pstmt.setString(3, contact.getContactName());
+			pstmt.setString(4, contact.getContactAlias());
+			pstmt.setString(5,contact.getContactBillingAddress());
+			pstmt.setString(6, contact.getContactBusinessNumber());
+			pstmt.setString(7, contact.getContactPhoneNumber());
+			pstmt.setString(8, contact.getContactEmailAddress());
+			pstmt.execute();
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 
 	}
@@ -72,17 +82,21 @@ public class ContactDAO {
 	public static void updateContact(Contact contact) {
 		// TODO Use prepared statements instead.
 
-		String sql = "UPDATE contacts " + "Set contactInvoiceCount = " + contact.getContactInvoiceCount()
-				+ ", contactName = '" + contact.getContactName() + "', contactAlias = '" + contact.getContactAlias()
-				+ "', contactBillingAddress = '" + contact.getContactBillingAddress() + "', contactBusinessNumber = '"
-				+ contact.getContactBusinessNumber() + "', contactPhoneNumber = '" + contact.getContactPhoneNumber()
-				+ "', contactEmailAddress = '" + contact.getContactEmailAddress() + "' WHERE contactID = "
-				+ contact.getContactID() + ";";
+		String sql = "UPDATE contacts SET  contactInvoiceCount= ?, contactName= ? , contactAlias= ?, contactBillingAddress= ?, contactBusinessNumber= ? , contactPhoneNumber= ?,"
+				+ " contactEmailAddress= ? WHERE contactID= ?";
 		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
-			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1, contact.getContactInvoiceCount());
+			pstmt.setString(2, contact.getContactName());
+			pstmt.setString(3, contact.getContactAlias());
+			pstmt.setString(4, contact.getContactBillingAddress());
+			pstmt.setString(5, contact.getContactBusinessNumber());
+			pstmt.setString(6, contact.getContactPhoneNumber());
+			pstmt.setString(7, contact.getContactEmailAddress());
+			pstmt.setInt(8, contact.getContactID());
+			pstmt.execute();
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -92,12 +106,12 @@ public class ContactDAO {
 	}
 
 	public static void deleteContact(Contact selectedContact) throws SQLException {
-		String sql = "DELETE FROM contacts WHERE contactID ='" + selectedContact.getContactID() + "'";
-
+		String sql = "DELETE FROM contacts WHERE contactID = ?";
 		try {
 			DatabaseConnection.dbConnect();
-			Statement stmt = DatabaseConnection.connection.createStatement();
-			stmt.execute(sql);
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1, selectedContact.getContactID());
+			pstmt.execute();
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
