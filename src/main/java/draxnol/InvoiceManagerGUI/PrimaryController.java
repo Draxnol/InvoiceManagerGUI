@@ -1,6 +1,7 @@
 package draxnol.InvoiceManagerGUI;
 
 import java.io.IOException;
+import java.lang.ProcessHandle.Info;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -30,7 +31,6 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
@@ -39,7 +39,10 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 
+
 public class PrimaryController {
+
+	
 
 	@FXML
 	private Font x1;
@@ -94,10 +97,13 @@ public class PrimaryController {
 
 	@FXML
 	private Button btnSelectProfile;
+
+	@FXML
+	private Button btnExport;
 	
 	@FXML
 	private Label labelSelectedProfile;
-	
+
 	@FXML
 	private Button btnLoadDB;
 
@@ -107,8 +113,8 @@ public class PrimaryController {
 	@FXML
 	private Color x4;
 
-	private final String datePattern = "yyyy-MM-dd";
-	
+	private static final String DATEPATTERN = "yyyy-MM-dd";
+
 	@FXML
 	private void initialize() {
 
@@ -139,40 +145,30 @@ public class PrimaryController {
 		unitCostCol.setCellValueFactory(new PropertyValueFactory<>("unitCost"));
 		unitCostCol.setCellValueFactory(cellData -> cellData.getValue().unitCostProperty().asObject());
 		unitCostCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-		unitCostCol.setOnEditCommit((CellEditEvent<InvoiceRow, Double> t) -> {
-			((InvoiceRow) t.getTableView().getItems().get(t.getTablePosition().getRow())).setUnitCost(t.getNewValue());
-
-		});
+		unitCostCol.setOnEditCommit((CellEditEvent<InvoiceRow, Double> t) -> ((InvoiceRow) t.getTableView().getItems()
+				.get(t.getTablePosition().getRow())).setUnitCost(t.getNewValue()));
 		tableViewInvoiceTable.getColumns().addAll(unitInfoCol, unitDescCol, unitCostCol);
 
 		/* Selected contact label */
 		labelSelectedContact.textProperty().bind(InvoiceManagerHelper.getInstance().contactLabel);
 
 		/* Action fires when contact is changed */
-		labelSelectedContact.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if (InvoiceManagerHelper.getInstance().profileChanged != true) {
-					clearGUI();
-					loadSelectedContactInvoices();
-					populateGUI();
-				}
-
-			}
-
+		labelSelectedContact.textProperty().addListener((ob, ov, nv) -> {
+			clearGUI();
+			loadSelectedContactInvoices();
+			populateGUI();
+			
 		});
-		
+
 		labelSelectedProfile.textProperty().bind(InvoiceManagerHelper.getInstance().profileLabel);
-		labelSelectedProfile.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				System.out.println("profile changed");
-				textFieldBillingPayable.setText(InvoiceManagerHelper.getInstance().getProfile().getProfileAddress());
-				clearGUI();
-				
-			}
+		labelSelectedProfile.textProperty().addListener((ob, ov, nv) -> {
+			
+			
+			textFieldBillingPayable.setText(InvoiceManagerHelper.getInstance().getProfile().getProfileAddress());
+			clearGUI();
+
 		});
-		
+
 		/* invoice list view */
 		invoicesListView.setCellFactory(param -> new ListCell<Invoice>() {
 			@Override
@@ -190,48 +186,47 @@ public class PrimaryController {
 
 		// This is where invoice selection happens.
 		invoicesListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-			System.out.println("Invoice Selection changed");
+			
 			Invoice currentInvoice = invoicesListView.getSelectionModel().getSelectedItem();
 			try {
 				dateFieldDate.getEditor().setText(currentInvoice.getInvoiceDateString());
 				textFieldInvoiceNumber.setText(String.valueOf(currentInvoice.getInvoiceNumber()));
 				currentInvoice.setInvoiceRow(InvoiceDAO.loadInvoiceRows(currentInvoice));
-				System.out.println(currentInvoice.getInvoiceRows());
+				System.out.println("Current invoice = "+ currentInvoice.getInvoiceRows());
 				tableViewInvoiceTable.setItems(currentInvoice.getInvoiceRows());
 			} catch (IndexOutOfBoundsException | SQLException | NullPointerException e) {
+				
+				//TODO EXECPTION HANDLING
 				System.out.println(e);
 			}
 		});
 
-	
-        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = 
-                DateTimeFormatter.ofPattern(datePattern);
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        };
-	
-        dateFieldDate.setConverter(converter);
-        dateFieldDate.setPromptText(datePattern.toLowerCase());
+		StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATEPATTERN);
+
+			@Override
+			public String toString(LocalDate date) {
+				if (date != null) {
+					return dateFormatter.format(date);
+				} else {
+					return "";
+				}
+			}
+
+			@Override
+			public LocalDate fromString(String string) {
+				if (string != null && !string.isEmpty()) {
+					return LocalDate.parse(string, dateFormatter);
+				} else {
+					return null;
+				}
+			}
+		};
+
+		dateFieldDate.setConverter(converter);
+		dateFieldDate.setPromptText(DATEPATTERN.toLowerCase());
 	}
 
-	
-	
-	
 	/* Support functions */
 	private void populateGUI() {
 		Contact currentContact = InvoiceManagerHelper.getInstance().getContact();
@@ -245,12 +240,11 @@ public class PrimaryController {
 		try {
 			invoicesListView.setItems(InvoiceDAO.loadSelectedContactInvoices(contactID));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 
 	}
-	
+
 	public void clearGUI() {
 		invoicesListView.setItems(null);
 		tableViewInvoiceTable.setItems(null);
@@ -263,19 +257,17 @@ public class PrimaryController {
 	@FXML
 	private void openContactManager() throws IOException {
 		if (InvoiceManagerHelper.getInstance().getProfile() != null) {
-			
+
 			FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("contactManager.fxml"));
 			Scene ContactManagerScene = new Scene(fxmlLoader.load());
 			Stage contactStage = new Stage();
 			contactStage.setTitle("Contact Manager");
 			contactStage.setScene(ContactManagerScene);
 			contactStage.show();
-		}else {
-			Alert alert = new Alert(AlertType.INFORMATION); 
+		} else {
+			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setHeaderText("Please select a profile");
-			alert.showAndWait()
-		      .filter(response -> response == ButtonType.OK)
-		      .ifPresent(response -> formatSystem());
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> formatSystem());
 		}
 	}
 
@@ -290,8 +282,12 @@ public class PrimaryController {
 	private void addNewInvoice() {
 		if (InvoiceManagerHelper.getInstance().getContact() != null) {
 			int invoiceCount = InvoiceManagerHelper.getInstance().getContact().getContactInvoiceCount();
+			System.out.println("invoice count = " + invoiceCount);
+			System.out.println("listview= " + invoicesListView);
+			
 			invoicesListView.getItems()
 					.add(new Invoice(invoiceCount, InvoiceManagerHelper.getInstance().getContact().getContactID()));
+			
 			InvoiceManagerHelper.getInstance().getContact().incrementInvoiceCount();
 		}
 	}
@@ -316,7 +312,7 @@ public class PrimaryController {
 		try {
 			Invoice selectedInvoice = invoicesListView.getItems().get(currentSelectionIndex);
 
-			if(dateFieldDate.getEditor().getText() == null){
+			if (dateFieldDate.getEditor().getText() == null) {
 				selectedInvoice.setDate(java.time.LocalDate.now().toString());
 			}
 			selectedInvoice.setInvoiceBillingAddress(textFieldBillTo.getText());
@@ -338,6 +334,36 @@ public class PrimaryController {
 		}
 
 	}
+	
+	
+	
+	
+	@FXML
+	private void openExportManager() {
+		if(InvoiceManagerHelper.getInstance().getContact()!=null) {
+			System.out.println(invoicesListView.getItems());
+			FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ExportManager.fxml"));	
+			Stage stage = new Stage();
+			try {
+				stage.setScene(new Scene(fxmlLoader.load()));
+				ExportManagerController exportManager = fxmlLoader.<ExportManagerController>getController();
+				exportManager.initData(invoicesListView.getItems());
+				stage.show();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+		}
+	
+	}
+	
+	
+	
+	
+	
 	/* table row buttons */
 
 	@FXML
@@ -370,8 +396,7 @@ public class PrimaryController {
 	/* Profile Manager */
 	@FXML
 	private void openProfileManager() {
-		
-		
+
 		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("profileManager.fxml"));
 		Scene profileScene;
 		try {

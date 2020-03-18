@@ -4,12 +4,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+@XmlRootElement
 public class Invoice {
 	//String Properties
 	private SimpleStringProperty payableAddress;
@@ -78,7 +83,7 @@ public class Invoice {
 		
 		return null;
 	}
-	
+	@XmlElement
 	public String getInvoiceDateString() {
 		return invoiceDateString.get();
 	}
@@ -88,7 +93,7 @@ public class Invoice {
 	public void setInvoiceID(int id) {
 		this.invoiceID.set(id);
 	}
-	
+	@XmlElement
 	public int getInvoiceID() {
 		return this.invoiceID.get();
 	}
@@ -102,7 +107,7 @@ public class Invoice {
 	public void setContactID(int id) {
 		contactID.set(id);
 	}
-	
+	@XmlElement
 	public int getContactID() {
 		return contactID.get();
 	}
@@ -117,7 +122,7 @@ public class Invoice {
 	public void setInvoiceNumber(int number) {
 		invoiceNumber.set(number);
 	}
-	
+	@XmlElement
 	public int getInvoiceNumber() {
 		return invoiceNumber.get();
 	}
@@ -131,7 +136,7 @@ public class Invoice {
 	public void setInvoicePayableAddress(String address) {
 		payableAddress.set(address);
 	}
-	
+	@XmlElement
 	public String getInvoicePayableAddress() {
 		return payableAddress.get();
 	}
@@ -144,7 +149,7 @@ public class Invoice {
 	public void setInvoiceBillingAddress(String address) {
 		billingAddress.set(address);
 	}
-	
+	@XmlElement
 	public String getInvoiceBillingAddress() {
 		return billingAddress.get();
 	}
@@ -157,12 +162,15 @@ public class Invoice {
 	public void setInvoiceTotal(Double total) {
 		invoiceTotal.set(total);
 	}
+	@XmlElement
 	public double getInvoiceTotal() {
 		return invoiceTotal.get();
 	}
+	
 	public SimpleDoubleProperty invoiceTotalProperty() {
 		return invoiceTotal;
 	}
+	
 	public String getInvoiceSummary() {
 		String retString = "Invoice number: " + invoiceNumber.get() + " Date: " + invoiceDateString.get();
 		return retString;
@@ -175,6 +183,8 @@ public class Invoice {
 	
 	/*Invoice Row*/
 	
+	@XmlElementWrapper(name="Invoice Rows")
+	@XmlElement(name="row")
 	public ObservableList<InvoiceRow> getInvoiceRows(){
 		return invoiceRows;
 	}

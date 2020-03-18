@@ -1,5 +1,7 @@
 package draxnol.invoice;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -32,15 +34,16 @@ public class InvoiceRow {
 		this.unitCost = new SimpleDoubleProperty(unitCost);
 		this.invoiceRowStatus = InvoiceRowStatus.NOT_SAVED;
 	}	
-
+	@XmlElement
 	public int getInvoiceID() {
 		return invoiceID;
 	}
 
+	@XmlElement
 	public int getRowID() {
 		return rowID;
 	}
-
+	@XmlElement
 	public int getRowNumber() {
 		return rowNumber;
 	}
@@ -73,7 +76,7 @@ public class InvoiceRow {
 		return this.unitInfo;
 	}
 	
-
+	@XmlElement
 	public String getUnitInfo() {
 		return this.unitInfoProperty().get();
 	}
@@ -88,7 +91,7 @@ public class InvoiceRow {
 		return this.unitDesc;
 	}
 	
-
+	@XmlElement
 	public String getUnitDesc() {
 		return this.unitDescProperty().get();
 	}
@@ -103,7 +106,7 @@ public class InvoiceRow {
 		return this.unitCost;
 	}
 	
-
+	@XmlElement
 	public double getUnitCost() {
 		return this.unitCostProperty().get();
 	}

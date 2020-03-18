@@ -112,6 +112,11 @@
                                     <Insets right="5.0" />
                                  </HBox.margin></Button>
                               <Button fx:id="btnDeleteInvoice" mnemonicParsing="false" onAction="#deleteSelectedInvoice" prefHeight="25.0" prefWidth="51.0" text="Delete" />
+                              <Button fx:id="btnExport" mnemonicParsing="false" onAction="#openExportManager" text="Export">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
                            </children>
                         </HBox>
                      </children>
@@ -163,7 +168,7 @@
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin></Button>
-                        <Label prefHeight="17.0" prefWidth="172.0" text="No Profile Selected" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="5" fx:id="labelSelectedProfile">
+                        <Label fx:id="labelSelectedProfile" prefHeight="17.0" prefWidth="172.0" text="No Profile Selected" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="5">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>

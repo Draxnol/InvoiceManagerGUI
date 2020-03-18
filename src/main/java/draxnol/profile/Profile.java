@@ -2,7 +2,10 @@ package draxnol.profile;
 
 
 import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class Profile{
 	
 	int profileID;
