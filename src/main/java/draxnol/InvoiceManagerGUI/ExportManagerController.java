@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
+import draxnol.files.DocxUtill;
 import draxnol.files.XMLUtill;
 import draxnol.invoice.Invoice;
 import javafx.collections.ObservableList;
@@ -12,8 +13,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -37,16 +40,22 @@ public class ExportManagerController {
     private Button btnExport;
 
     @FXML
+    private RadioButton radioBtnXml;
+    
+    @FXML
+    private RadioButton radioBtnDocx;
+
+    @FXML
+    private ToggleGroup exportOptionGroup;
+    
+    @FXML
     private void exportSelectedInvoices() {
     	if(selectedDirectory != null) {
-    		ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
-    		for(Invoice invoice : exportList) {
-    			try {
-					XMLUtill.marshal(invoice, selectedDirectory);
-				} catch (JAXBException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    		if(radioBtnXml.isSelected()) {
+    			exportToXmlFiles();
+    		}
+    		if(radioBtnDocx.isSelected()) {
+    			exportTodocxFiles();
     		}
     		
     	
@@ -55,6 +64,30 @@ public class ExportManagerController {
     
     }
 
+    private void exportToXmlFiles() {
+		ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
+		for(Invoice invoice : exportList) {
+			try {
+				XMLUtill.marshal(invoice, selectedDirectory);
+			} catch (JAXBException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+    	
+    	
+    }
+    private void exportTodocxFiles() {
+    	ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
+    	for(Invoice invoice : exportList) {
+    		DocxUtill.exportTodocx(invoice, new File("C:\\Users\\robert\\Documents\\Invoicetemplate.docx"), selectedDirectory);
+    	}
+    
+    
+    
+    }
+    
+    
     @FXML
     private void openDirBrowser() {
     	directoryChooser = new DirectoryChooser();

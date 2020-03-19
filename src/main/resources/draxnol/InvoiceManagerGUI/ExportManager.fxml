@@ -7,8 +7,11 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -58,7 +61,7 @@
       </MenuBar>
       <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="375.0" prefWidth="454.0" VBox.vgrow="ALWAYS">
          <children>
-            <ListView fx:id="exportListView" layoutX="14.0" layoutY="14.0" prefHeight="350.0" prefWidth="200.0" />
+            <ListView fx:id="exportListView" layoutX="14.0" layoutY="14.0" prefHeight="350.0" prefWidth="208.0" />
             <GridPane layoutX="223.0" layoutY="14.0" prefHeight="350.0" prefWidth="200.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -78,15 +81,47 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnDirSelect" mnemonicParsing="false" onAction="#openDirBrowser" prefHeight="25.0" prefWidth="136.0" text="Select" GridPane.rowIndex="1" />
-                  <Label text="Select a directory: ">
+                  <Button fx:id="btnDirSelect" mnemonicParsing="false" onAction="#openDirBrowser" prefHeight="25.0" prefWidth="136.0" text="Select" GridPane.rowIndex="1">
                      <GridPane.margin>
-                        <Insets top="10.0" />
+                        <Insets left="5.0" />
+                     </GridPane.margin></Button>
+                  <Label text="Select a directory: " GridPane.columnSpan="2">
+                     <GridPane.margin>
+                        <Insets left="5.0" top="10.0" />
                      </GridPane.margin>
                   </Label>
                   <Label GridPane.columnSpan="2" GridPane.rowIndex="9" />
-                  <TextField fx:id="textAreaDirectory" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                  <Button fx:id="btnExport" mnemonicParsing="false" onAction="#exportSelectedInvoices" text="Export" GridPane.rowIndex="10" />
+                  <TextField fx:id="textAreaDirectory" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin></TextField>
+                  <Button fx:id="btnExport" mnemonicParsing="false" onAction="#exportSelectedInvoices" text="Export" GridPane.rowIndex="10">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin></Button>
+                  <Label text="Options:" GridPane.rowIndex="7">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Separator prefHeight="0.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
+                     <GridPane.margin>
+                        <Insets left="5.0" top="25.0" />
+                     </GridPane.margin>
+                  </Separator>
+                  <RadioButton fx:id="radioBtnXml" mnemonicParsing="false" selected="true" text="XML" GridPane.rowIndex="8">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="exportOptionGroup" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="radioBtnDocx" mnemonicParsing="false" text="Docx" toggleGroup="$exportOptionGroup" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </RadioButton>
                </children>
             </GridPane>
          </children>

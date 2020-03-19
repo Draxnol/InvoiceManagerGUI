@@ -186,7 +186,7 @@ public class Invoice {
 	
 	/*Invoice Row*/
 	
-	@XmlElementWrapper(name="Invoice Rows")
+	@XmlElementWrapper(name="InvoiceRows")
 	@XmlElement(name="row")
 	public ObservableList<InvoiceRow> getInvoiceRows(){
 		return invoiceRows;

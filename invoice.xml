@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<exportInvoice>
+    <date>today</date>
+    <invoiceBillingAddress>123 fakeStreet</invoiceBillingAddress>
+    <invoiceHeader>Bob</invoiceHeader>
+    <invoiceNumber>0001</invoiceNumber>
+    <invoicePayableAddress>2222 street</invoicePayableAddress>
+    <Invoice Rows>
+        <row>
+            <rowCost>die</rowCost>
+            <rowDesc>okay</rowDesc>
+            <rowUnit>12</rowUnit>
+        </row>
+        <row>
+            <rowCost>live</rowCost>
+            <rowDesc>no</rowDesc>
+            <rowUnit>13</rowUnit>
+        </row>
+    </Invoice Rows>
+</exportInvoice>

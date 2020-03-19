@@ -10,6 +10,7 @@ import javax.xml.bind.Marshaller;
 import draxnol.invoice.Invoice;
 
 public class XMLUtill {
+	
 	public static void marshal(Invoice invoice, File file) throws JAXBException, IOException {
 		
 		String invoiceFileName = "invoice# " + invoice.getInvoiceNumber();
