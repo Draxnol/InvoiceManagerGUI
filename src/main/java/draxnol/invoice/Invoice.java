@@ -4,9 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -31,6 +33,7 @@ public class Invoice {
 	private SimpleStringProperty invoiceDateString;
 	public InvoiceStatus invoiceStatus;
 	
+	@XmlTransient
 	public ObservableList<InvoiceRow> invoiceRows = FXCollections.observableArrayList();
 	
 	

@@ -3,16 +3,16 @@ package draxnol.InvoiceManagerGUI;
 import java.io.File;
 import java.io.IOException;
 
-import draxnol.export.ExportInvoice;
+import javax.xml.bind.JAXBException;
+
+import draxnol.files.XMLUtill;
 import draxnol.invoice.Invoice;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -22,6 +22,8 @@ public class ExportManagerController {
 	private Stage exportStage;
 	private PrimaryController primeController;
 	private ObservableList<Invoice> invoiceObList;
+	private File selectedDirectory;
+	
 	@FXML
     private ListView<Invoice> exportListView = new ListView<>();
 
@@ -36,14 +38,29 @@ public class ExportManagerController {
 
     @FXML
     private void exportSelectedInvoices() {
-    	exportListView.getItems().add(new Invoice());
+    	if(selectedDirectory != null) {
+    		ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
+    		for(Invoice invoice : exportList) {
+    			try {
+					XMLUtill.marshal(invoice, selectedDirectory);
+				} catch (JAXBException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		
+    	
+    	}
+    
+    
     }
 
     @FXML
     private void openDirBrowser() {
     	directoryChooser = new DirectoryChooser();
-    	File  selectedDirectory = directoryChooser.showDialog(btnDirSelect.getScene().getWindow());
+    	selectedDirectory = directoryChooser.showDialog(btnDirSelect.getScene().getWindow());
     	textAreaDirectory.setText(selectedDirectory.toString());
+    	
     }
     
     @FXML
@@ -61,9 +78,10 @@ public class ExportManagerController {
 			}
 
 		});
+			 	
+		exportListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		
-		exportListView.getItems().add(new Invoice());
-	 	
+    
     }
     
     public ExportManagerController() {}
@@ -71,7 +89,6 @@ public class ExportManagerController {
     
 
 	public void initData(ObservableList<Invoice> items) {
-		System.out.println(items);
 		exportListView.getItems().addAll(items);
 	}
 

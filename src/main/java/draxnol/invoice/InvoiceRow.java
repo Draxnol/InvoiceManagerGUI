@@ -1,6 +1,7 @@
 package draxnol.invoice;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,6 +21,7 @@ public class InvoiceRow {
 	private SimpleStringProperty unitInfo;
 	private SimpleStringProperty unitDesc;
 	private SimpleDoubleProperty unitCost;
+	
 	
 	public InvoiceRow() {
 		this.unitInfo = new SimpleStringProperty();
