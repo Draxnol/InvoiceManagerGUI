@@ -3,6 +3,7 @@ package draxnol.invoice;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -18,6 +19,8 @@ import javafx.collections.ObservableList;
 
 @XmlRootElement
 public class Invoice {
+	
+	public int tempID;
 	//String Properties
 	private SimpleStringProperty payableAddress;
 	private SimpleStringProperty billingAddress;
@@ -50,8 +53,12 @@ public class Invoice {
 		this.invoiceStatus = InvoiceStatus.NOT_SAVED;
 		this.invoiceNumber.set(invoiceNumber);
 		this.contactID.set(contactID);
+		Random rand = new Random();
+		this.tempID = rand.nextInt(); 
 		System.out.println(date);
 		this.setDate(date);
+		                                                     
+	
 	}
 	
 	private void init() {
@@ -193,6 +200,11 @@ public class Invoice {
 	public void setInvoiceStatusSaved() {
 		this.invoiceStatus = InvoiceStatus.SAVED;
 		
+	}
+
+	public int getTempID() {
+		
+		return tempID;
 	}
 
 }

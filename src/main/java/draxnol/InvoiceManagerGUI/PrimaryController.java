@@ -192,7 +192,8 @@ public class PrimaryController {
 				tableViewInvoiceTable.setItems(null);
 				dateFieldDate.getEditor().setText(currentInvoice.getInvoiceDateString());
 				textFieldInvoiceNumber.setText(String.valueOf(currentInvoice.getInvoiceNumber()));
-				currentInvoice.setInvoiceRow(InvoiceDAO.loadInvoiceRows(currentInvoice));
+				System.out.println("Current invoice id = " + currentInvoice.getInvoiceID());
+				currentInvoice.setInvoiceRow(InvoiceDAO.loadInvoiceRows(currentInvoice.getInvoiceID()));
 				tableViewInvoiceTable.setItems(currentInvoice.getInvoiceRows());
 				
 			} catch (IndexOutOfBoundsException | SQLException | NullPointerException e) {
@@ -287,7 +288,7 @@ public class PrimaryController {
 			System.out.println("listview= " + invoicesListView);
 			
 			invoicesListView.getItems()
-					.add(new Invoice(invoiceCount, InvoiceManagerHelper.getInstance().getContact().getContactID(),dateFieldDate.getEditor().getText() ));
+					.add(new Invoice(invoiceCount, InvoiceManagerHelper.getInstance().getContact().getContactID(),dateFieldDate.getEditor().getText()));
 			
 			InvoiceManagerHelper.getInstance().getContact().incrementInvoiceCount();
 		}
@@ -330,21 +331,24 @@ public class PrimaryController {
 			if (selectedInvoice.getInvoiceStatus().equals(InvoiceStatus.SAVED)) {
 				System.out.println("Invoice Status is saved");
 				InvoiceDAO.updateInvoice(selectedInvoice);
+				InvoiceDAO.saveRows(selectedInvoice.getInvoiceRows(), selectedInvoice.getInvoiceID());
+
 			} else if (selectedInvoice.getInvoiceStatus().equals(InvoiceStatus.NOT_SAVED)) {
 				System.out.println("Invoice Status is not saved");
-				InvoiceDAO.addNewInvoice(selectedInvoice);
+				int invoiceID = InvoiceDAO.addNewInvoice(selectedInvoice);
 				ContactDAO.updateContactInvoiceCount(InvoiceManagerHelper.getInstance().getContact());
+				InvoiceDAO.saveRows(selectedInvoice.getInvoiceRows(), invoiceID);
+				selectedInvoice.setInvoiceID(invoiceID);
+			
 			}
 
-			InvoiceDAO.saveRows(selectedInvoice.getInvoiceRows(), selectedInvoice.getInvoiceID());
+			
 
 		} catch (IndexOutOfBoundsException e) {
 			System.out.println(e);
 		}
 
 	}
-	
-	
 	
 	
 	@FXML
@@ -379,7 +383,12 @@ public class PrimaryController {
 	private void addNewRow() {
 		if (InvoiceManagerHelper.getInstance().getContact() != null) {
 			Invoice currentInvoice = invoicesListView.getSelectionModel().getSelectedItem();
-			tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0, currentInvoice.getInvoiceID()));
+			if(currentInvoice.invoiceStatus == InvoiceStatus.SAVED){
+				tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0, currentInvoice.getInvoiceID()));
+			}else {
+				tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0, currentInvoice.getTempID()));
+			}
+			
 		}
 	}
 

@@ -56,10 +56,7 @@ public class InvoiceDAO {
 	}
 
 	
-	public static void saveRows(ObservableList<InvoiceRow> invoiceRows, int invoiceID) {
-		
-		
-		
+	public static void saveRows(ObservableList<InvoiceRow> invoiceRows, int invoiceID) {		
 		int rowNumber = invoiceRows.size() + 1;
 		String sql;
 		System.out.println("invoiceID is " + invoiceID);
@@ -126,10 +123,11 @@ public class InvoiceDAO {
 		
 	}
 
-	public static void addNewInvoice(Invoice selectedInvoice) {
+	public static int addNewInvoice(Invoice selectedInvoice) {
 		String sql = "INSERT INTO invoices\n" + 
 				"(contactID, invoiceNumber, payableAddress, billingAddress, invoiceDateString, invoiceTotal)\r\n"
 				+ "VALUES(?,?,?,?,?,?)" ; 
+		String sql2  = "SELECT last_insert_rowid()";
 		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
@@ -141,12 +139,16 @@ public class InvoiceDAO {
 			System.out.println(selectedInvoice.getInvoiceDateString());
 			pstmt.setString(5, selectedInvoice.getInvoiceDateString());
 			pstmt.setDouble(6, selectedInvoice.getInvoiceTotal());
-			pstmt.execute();			
-			DatabaseConnection.dbDisconnect();
+			pstmt.execute();
+			pstmt = DatabaseConnection.connection.prepareStatement(sql2);
+			int invoiceID = pstmt.getGeneratedKeys().getInt(1);
+			System.out.println(invoiceID);
+			return invoiceID;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return 0;
 	}
 	
 	public static void deleteInvoice(Invoice selectedInvoice) {
@@ -166,12 +168,12 @@ public class InvoiceDAO {
 			e.printStackTrace();
 		}
 	}
-	public static ObservableList<InvoiceRow> loadInvoiceRows(Invoice SelectedInvoice) throws SQLException {
+	public static ObservableList<InvoiceRow> loadInvoiceRows(int invoiceID) throws SQLException {
 		String sql = "SELECT * FROM invoiceRows where invoiceID = ?";
 		try {
 			DatabaseConnection.dbConnect();
 			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
-			pstmt.setInt(1, SelectedInvoice.getInvoiceID());
+			pstmt.setInt(1, invoiceID);
 			ResultSet rs = pstmt.executeQuery();;
 			ObservableList<InvoiceRow> invoiceRowList = getInvoiceRowsOBList(rs);
 			DatabaseConnection.dbDisconnect();
