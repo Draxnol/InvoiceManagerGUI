@@ -85,7 +85,7 @@ public class ProfileManagerController {
 
 	@FXML
 	private void newProfile() {
-		Profile newProfile = new Profile();
+		Profile newProfile = new Profile("New Profile");
 		newProfile.status = ProfileStatus.NEW;
 		listViewProfile.getItems().add(newProfile);
 
@@ -93,6 +93,19 @@ public class ProfileManagerController {
 
 	@FXML
 	private void saveProfile() throws SQLException {
+		if (textFieldProfileName.getText() == null) {
+			showEmptyNameFieldAlert();
+		}else if (textFieldProfileHeader.getText() == null) {
+			showEmptyHeaderFieldAlert();
+		} else if (textFieldProfileAddress.getText() == null) {
+			showEmptyAddressFieldAlert();
+		}else {
+			saveProfileToDB();
+		}
+
+	}
+
+	private void saveProfileToDB() throws SQLException {
 		try {
 			Profile selectedProfile = getSelectedProfile();
 			selectedProfile.setProfileAddress(textFieldProfileAddress.getText());
@@ -124,7 +137,7 @@ public class ProfileManagerController {
 		try {
 			InvoiceManagerHelper.getInstance().setProfile(getSelectedProfile());
 			InvoiceManagerHelper.getInstance().updateProfileLabel();
-			//InvoiceManagerHelper.getInstance().setContact(null);
+			// InvoiceManagerHelper.getInstance().setContact(null);
 			Stage stage = (Stage) btnSelect.getScene().getWindow();
 			stage.close();
 		} catch (NullPointerException e) {
@@ -161,6 +174,39 @@ public class ProfileManagerController {
 	private void showNoProfileSelectedAlert() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setHeaderText("No profile selected");
+		alert.showAndWait().ifPresent(response -> {
+			if (response == ButtonType.OK) {
+
+			}
+
+		});
+	}
+
+	private void showEmptyNameFieldAlert() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText("Profile Name Field is empty");
+		alert.showAndWait().ifPresent(response -> {
+			if (response == ButtonType.OK) {
+
+			}
+
+		});
+	}
+
+	private void showEmptyHeaderFieldAlert() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText("Profile Header Field is empty");
+		alert.showAndWait().ifPresent(response -> {
+			if (response == ButtonType.OK) {
+
+			}
+
+		});
+	}
+
+	private void showEmptyAddressFieldAlert() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText("Profile Address Field is empty");
 		alert.showAndWait().ifPresent(response -> {
 			if (response == ButtonType.OK) {
 

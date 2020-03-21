@@ -98,7 +98,7 @@ public class ContactManagerController {
 
 	@FXML
 	private void newContact() {
-		Contact newContact = new Contact();
+		Contact newContact = new Contact("New contact");
 		newContact.status = ContactStatus.NEW;
 		contactListView.getItems().add(newContact);
 

@@ -25,17 +25,26 @@ public class Contact {
 	
 	
 
-	public Contact() {
+	private void init() {
 		contactID = new SimpleIntegerProperty();
 		contactInvoiceCount = new SimpleIntegerProperty();
-		contactName = new SimpleStringProperty();
 		contactAlias = new SimpleStringProperty();
 		contactBillingAddress = new SimpleStringProperty();
 		contactPhoneNumber = new SimpleStringProperty();
 		contactBusinessNumber = new SimpleStringProperty();
 		contactEmailAddress = new SimpleStringProperty();
 	}
-
+	
+	public Contact() {
+		contactName = new SimpleStringProperty();
+		init();
+	}
+	
+	public Contact(String name) {
+		contactName = new SimpleStringProperty();
+		contactName.set(name);
+		init();
+	}
 	
 	/*Profile ID*/
 	public void setProfileID(int id){

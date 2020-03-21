@@ -21,13 +21,22 @@ public class Profile{
 	
 	
 	
+	public Profile(String name) {
+		profileName = new SimpleStringProperty();
+		profileName.set(name);
+		init();
+	}
+	
 	public Profile() {
 		profileName = new SimpleStringProperty();
+		init();
+	}
+
+	private void init() {
+		
 		profileAddress = new SimpleStringProperty();
 		profileHeader = new SimpleStringProperty();
 	}
-
-
 
 
 	public int getProfileID() {
@@ -128,8 +137,8 @@ public class Profile{
 
 
 
-	public String getProfileSummary() {
-		return "Name:" + getProfileName();
+	public String getProfileSummary() {	
+		return "Name: " + getProfileName();
 	}
 	
 	

@@ -5,7 +5,6 @@ import java.lang.ProcessHandle.Info;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 import draxnol.contact.Contact;
 import draxnol.contact.ContactDAO;
 import draxnol.database.utilDAO;
