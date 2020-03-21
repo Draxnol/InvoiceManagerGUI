@@ -138,6 +138,7 @@ public class InvoiceDAO {
 			pstmt.setInt(2, selectedInvoice.getInvoiceNumber());
 			pstmt.setString(3, selectedInvoice.getInvoicePayableAddress());
 			pstmt.setString(4, selectedInvoice.getInvoiceBillingAddress());
+			System.out.println(selectedInvoice.getInvoiceDateString());
 			pstmt.setString(5, selectedInvoice.getInvoiceDateString());
 			pstmt.setDouble(6, selectedInvoice.getInvoiceTotal());
 			pstmt.execute();			
@@ -150,11 +151,15 @@ public class InvoiceDAO {
 	
 	public static void deleteInvoice(Invoice selectedInvoice) {
 		String sql = "DELETE FROM invoices WHERE invoiceID = ?";
+		String sqlRow = "DELETE FROM invoiceRows where invoiceID = ?";
 		try {
 			DatabaseConnection.dbConnect();
 			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
-			pstmt.setInt(1,selectedInvoice.getContactID());
+			pstmt.setInt(1,selectedInvoice.getInvoiceID());
 			pstmt.execute();			
+			pstmt = DatabaseConnection.connection.prepareStatement(sqlRow);
+			pstmt.setInt(1,selectedInvoice.getInvoiceID());
+			pstmt.execute();	
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -204,12 +209,15 @@ public class InvoiceDAO {
 
 	public static void deleteRow(int rowID) {
 		String sql = "DELETE FROM invoiceRows WHERE rowID = ?";
-	
+		
 		try {
 			DatabaseConnection.dbConnect();
 			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
 			pstmt.setInt(1, rowID);			
 			pstmt.execute();			
+			
+			
+			
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

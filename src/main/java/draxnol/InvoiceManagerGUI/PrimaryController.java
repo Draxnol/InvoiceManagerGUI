@@ -43,7 +43,7 @@ import javafx.util.converter.DoubleStringConverter;
 public class PrimaryController {
 
 	
-
+	private int invoiceCounter;
 	@FXML
 	private Font x1;
 
@@ -189,11 +189,12 @@ public class PrimaryController {
 			
 			Invoice currentInvoice = invoicesListView.getSelectionModel().getSelectedItem();
 			try {
+				tableViewInvoiceTable.setItems(null);
 				dateFieldDate.getEditor().setText(currentInvoice.getInvoiceDateString());
 				textFieldInvoiceNumber.setText(String.valueOf(currentInvoice.getInvoiceNumber()));
 				currentInvoice.setInvoiceRow(InvoiceDAO.loadInvoiceRows(currentInvoice));
-				System.out.println("Current invoice = "+ currentInvoice.getInvoiceRows());
 				tableViewInvoiceTable.setItems(currentInvoice.getInvoiceRows());
+				
 			} catch (IndexOutOfBoundsException | SQLException | NullPointerException e) {
 				
 				//TODO EXECPTION HANDLING
@@ -286,7 +287,7 @@ public class PrimaryController {
 			System.out.println("listview= " + invoicesListView);
 			
 			invoicesListView.getItems()
-					.add(new Invoice(invoiceCount, InvoiceManagerHelper.getInstance().getContact().getContactID()));
+					.add(new Invoice(invoiceCount, InvoiceManagerHelper.getInstance().getContact().getContactID(),dateFieldDate.getEditor().getText() ));
 			
 			InvoiceManagerHelper.getInstance().getContact().incrementInvoiceCount();
 		}
@@ -296,12 +297,18 @@ public class PrimaryController {
 	private void deleteSelectedInvoice() {
 		int currentSelectionIndex = invoicesListView.getSelectionModel().getSelectedIndex();
 		try {
-
-			invoicesListView.getItems().remove(currentSelectionIndex);
+			
+	
 			InvoiceManagerHelper.getInstance().getContact().decrementInvoiceCount();
-
+			Invoice selectedInvoice = invoicesListView.getItems().get(currentSelectionIndex);
+			System.out.println(selectedInvoice.getInvoiceSummary());
+			InvoiceDAO.deleteInvoice(selectedInvoice);
+			ContactDAO.updateContactInvoiceCount(InvoiceManagerHelper.getInstance().getContact());
+			
 		} catch (IndexOutOfBoundsException e) {
 			System.out.println(e);
+		}finally {
+			invoicesListView.getItems().remove(currentSelectionIndex);
 		}
 
 	}
@@ -311,9 +318,11 @@ public class PrimaryController {
 		int currentSelectionIndex = invoicesListView.getSelectionModel().getSelectedIndex();
 		try {
 			Invoice selectedInvoice = invoicesListView.getItems().get(currentSelectionIndex);
-
+			
 			if (dateFieldDate.getEditor().getText() == null) {
 				selectedInvoice.setDate(java.time.LocalDate.now().toString());
+			}else {
+				selectedInvoice.setDate(dateFieldDate.getEditor().getText());
 			}
 			selectedInvoice.setInvoiceBillingAddress(textFieldBillTo.getText());
 			selectedInvoice.setInvoicePayableAddress(textFieldBillingPayable.getText());
@@ -324,7 +333,7 @@ public class PrimaryController {
 			} else if (selectedInvoice.getInvoiceStatus().equals(InvoiceStatus.NOT_SAVED)) {
 				System.out.println("Invoice Status is not saved");
 				InvoiceDAO.addNewInvoice(selectedInvoice);
-				ContactDAO.updateContactInvoiceCount();
+				ContactDAO.updateContactInvoiceCount(InvoiceManagerHelper.getInstance().getContact());
 			}
 
 			InvoiceDAO.saveRows(selectedInvoice.getInvoiceRows(), selectedInvoice.getInvoiceID());
@@ -368,9 +377,10 @@ public class PrimaryController {
 
 	@FXML
 	private void addNewRow() {
-		if (InvoiceManagerHelper.getInstance().getContact() != null)
-			tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0));
-
+		if (InvoiceManagerHelper.getInstance().getContact() != null) {
+			Invoice currentInvoice = invoicesListView.getSelectionModel().getSelectedItem();
+			tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0, currentInvoice.getInvoiceID()));
+		}
 	}
 
 	@FXML

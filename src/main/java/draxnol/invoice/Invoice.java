@@ -28,8 +28,6 @@ public class Invoice {
 	private SimpleIntegerProperty invoiceID;
 	private SimpleIntegerProperty contactID;
 	//Date 
-	private Date invoiceDate;
-	private SimpleDateFormat dateFormat;
 	private SimpleStringProperty invoiceDateString;
 	public InvoiceStatus invoiceStatus;
 	
@@ -47,19 +45,19 @@ public class Invoice {
 		init();
 	}
 	
-	public Invoice(int invoiceNumber, int contactID) {
+	public Invoice(int invoiceNumber, int contactID, String date) {
 		init();
 		this.invoiceStatus = InvoiceStatus.NOT_SAVED;
 		this.invoiceNumber.set(invoiceNumber);
 		this.contactID.set(contactID);
+		System.out.println(date);
+		this.setDate(date);
 	}
 	
 	private void init() {
-		this.dateFormat = new SimpleDateFormat();
 		this.invoiceID = new SimpleIntegerProperty();
 		this.contactID = new SimpleIntegerProperty();
 		this.invoiceNumber = new SimpleIntegerProperty();
-		this.invoiceDate = new Date();
 		this.payableAddress = new SimpleStringProperty();
 		this.billingAddress = new SimpleStringProperty();
 		this.invoiceTotal = new SimpleDoubleProperty();
@@ -75,17 +73,7 @@ public class Invoice {
 		
 	}
 
-	public Date getInvoiceDate() {
-		try {
-			Date returnDate = dateFormat.parse(this.invoiceDateString.get());
-			return returnDate;
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
+
 	@XmlElement
 	public String getInvoiceDateString() {
 		return invoiceDateString.get();

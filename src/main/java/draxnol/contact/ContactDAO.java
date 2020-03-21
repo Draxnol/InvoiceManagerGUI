@@ -120,8 +120,20 @@ public class ContactDAO {
 
 	}
 
-	public static void updateContactInvoiceCount() {
-	
+	public static void updateContactInvoiceCount(Contact contact) {
+		String sql = "UPDATE contacts SET contactInvoiceCount= ?";
+		try {
+			DatabaseConnection.dbConnect();
+			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
+			pstmt.setInt(1, contact.getContactInvoiceCount());
+			pstmt.execute();
+			DatabaseConnection.dbDisconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+				
 	}
 
 }

@@ -30,7 +30,9 @@ public class InvoiceRow {
 		
 	}
 
-	public InvoiceRow(String unitInfo, String unitDesc, int unitCost) {
+	public InvoiceRow(String unitInfo, String unitDesc, int unitCost, int invoiceID)
+	{
+		this.invoiceID = invoiceID;
 		this.unitInfo = new SimpleStringProperty(unitInfo);
 		this.unitDesc = new SimpleStringProperty(unitDesc);
 		this.unitCost = new SimpleDoubleProperty(unitCost);
