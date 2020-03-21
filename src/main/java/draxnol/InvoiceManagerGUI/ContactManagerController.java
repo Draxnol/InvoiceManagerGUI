@@ -136,7 +136,20 @@ public class ContactManagerController {
 
 	@FXML
 	private void saveContact() {
-		// TODO Input validation
+		if(textFieldAlias.getText() == null) {
+			showAlert("Contact alias is empty");
+		}else if(textFieldContactName.getText() == null) {
+			showAlert("Contact name is empty");
+		}else if(textAreaBillingAddress.getText() == null) {
+			showAlert("Contact address is empty");
+		}else if(textFieldCount == null) {
+			showAlert("invoice count is empty");
+		}else {
+			saveContactToDB();
+		}
+	}
+	
+	private void saveContactToDB() {
 		try {
 			Contact selectedContact = getSelectedContact();
 			selectedContact.setProfileID(InvoiceManagerHelper.getInstance().getProfile().getProfileID());
@@ -172,6 +185,8 @@ public class ContactManagerController {
 			noContactSelectedAlert();
 		}
 	}
+	
+	
 	private Contact getSelectedContact() {
 		try {
 			int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
@@ -185,12 +200,16 @@ public class ContactManagerController {
 	private void noContactSelectedAlert() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setHeaderText("No contact selected"); 
-		alert.showAndWait()
-	      .filter(response -> response == ButtonType.OK);
+		alert.showAndWait();
 	 
 	}
 	
-	
+
+	private void showAlert(String text) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setHeaderText(text);
+		alert.showAndWait();
+	}
 	
 
 }

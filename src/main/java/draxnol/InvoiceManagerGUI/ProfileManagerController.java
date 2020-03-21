@@ -94,11 +94,11 @@ public class ProfileManagerController {
 	@FXML
 	private void saveProfile() throws SQLException {
 		if (textFieldProfileName.getText() == null) {
-			showEmptyNameFieldAlert();
+			showAlert("Profile name is empty");
 		}else if (textFieldProfileHeader.getText() == null) {
-			showEmptyHeaderFieldAlert();
+			showAlert("Profile header is empty");
 		} else if (textFieldProfileAddress.getText() == null) {
-			showEmptyAddressFieldAlert();
+			showAlert("Profile address is empty");
 		}else {
 			saveProfileToDB();
 		}
@@ -174,44 +174,13 @@ public class ProfileManagerController {
 	private void showNoProfileSelectedAlert() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setHeaderText("No profile selected");
-		alert.showAndWait().ifPresent(response -> {
-			if (response == ButtonType.OK) {
-
-			}
-
-		});
+		alert.showAndWait();
 	}
 
-	private void showEmptyNameFieldAlert() {
+	private void showAlert(String text) {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setHeaderText("Profile Name Field is empty");
-		alert.showAndWait().ifPresent(response -> {
-			if (response == ButtonType.OK) {
-
-			}
-
-		});
+		alert.setHeaderText(text);
+		alert.showAndWait();
 	}
-
-	private void showEmptyHeaderFieldAlert() {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setHeaderText("Profile Header Field is empty");
-		alert.showAndWait().ifPresent(response -> {
-			if (response == ButtonType.OK) {
-
-			}
-
-		});
-	}
-
-	private void showEmptyAddressFieldAlert() {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setHeaderText("Profile Address Field is empty");
-		alert.showAndWait().ifPresent(response -> {
-			if (response == ButtonType.OK) {
-
-			}
-
-		});
-	}
+	
 }
