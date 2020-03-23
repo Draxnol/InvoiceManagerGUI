@@ -1,11 +1,5 @@
 package draxnol.invoice;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
-
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,7 +14,7 @@ import javafx.collections.ObservableList;
 @XmlRootElement
 public class Invoice {
 	
-	public int tempID;
+	
 	//String Properties
 	private SimpleStringProperty payableAddress;
 	private SimpleStringProperty billingAddress;
@@ -36,6 +30,7 @@ public class Invoice {
 	
 	@XmlTransient
 	public ObservableList<InvoiceRow> invoiceRows = FXCollections.observableArrayList();
+	private String profileHeader;
 	
 	
 	public enum InvoiceStatus{
@@ -48,17 +43,15 @@ public class Invoice {
 		init();
 	}
 	
-	public Invoice(int invoiceNumber, int contactID, String date) {
+	public Invoice(int invoiceNumber, int contactID, String date, String payable, String billing, String profileHeader) {
 		init();
 		this.invoiceStatus = InvoiceStatus.NOT_SAVED;
 		this.invoiceNumber.set(invoiceNumber);
 		this.contactID.set(contactID);
-		Random rand = new Random();
-		this.tempID = rand.nextInt(); 
-		System.out.println(date);
 		this.setDate(date);
-		                                                     
-	
+		this.payableAddress.set(payable);
+		this.billingAddress.set(billing);
+		this.profileHeader = profileHeader;
 	}
 	
 	private void init() {
@@ -80,7 +73,11 @@ public class Invoice {
 		
 	}
 
-
+	@XmlElement
+	public String getProfileHeader() {
+		return profileHeader;
+	}
+	
 	@XmlElement
 	public String getInvoiceDateString() {
 		return invoiceDateString.get();
@@ -202,10 +199,11 @@ public class Invoice {
 		
 	}
 
-	public int getTempID() {
+	public void setProfileHeader(String header) {
+		this.profileHeader = header;
 		
-		return tempID;
 	}
+
 
 }
 

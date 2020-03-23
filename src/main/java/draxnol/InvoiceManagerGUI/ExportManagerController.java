@@ -26,7 +26,7 @@ public class ExportManagerController {
 	private PrimaryController primeController;
 	private ObservableList<Invoice> invoiceObList;
 	private File selectedDirectory;
-	
+	private File savePath;
 	@FXML
     private ListView<Invoice> exportListView = new ListView<>();
 
@@ -50,7 +50,7 @@ public class ExportManagerController {
     
     @FXML
     private void exportSelectedInvoices() {
-    	if(selectedDirectory != null) {
+    	if(savePath != null) {
     		if(radioBtnXml.isSelected()) {
     			exportToXmlFiles();
     		}
@@ -68,7 +68,8 @@ public class ExportManagerController {
 		ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
 		for(Invoice invoice : exportList) {
 			try {
-				XMLUtill.marshal(invoice, selectedDirectory);
+				invoice.setProfileHeader(InvoiceManagerHelper.getInstance().getProfile().getProfileHeader());
+				XMLUtill.marshal(invoice, savePath);
 			} catch (JAXBException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -80,7 +81,8 @@ public class ExportManagerController {
     private void exportTodocxFiles() {
     	ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
     	for(Invoice invoice : exportList) {
-    		DocxUtill.exportTodocx(invoice, new File("C:\\Users\\robert\\Documents\\Invoicetemplate.docx"), selectedDirectory);
+    		invoice.setProfileHeader(InvoiceManagerHelper.getInstance().getProfile().getProfileHeader());
+    		DocxUtill.exportTodocx(invoice, new File("C:\\Users\\robert\\Documents\\Invoicetemplate.docx"), savePath);
     	}
     
     
@@ -92,8 +94,13 @@ public class ExportManagerController {
     private void openDirBrowser() {
     	directoryChooser = new DirectoryChooser();
     	selectedDirectory = directoryChooser.showDialog(btnDirSelect.getScene().getWindow());
-    	textAreaDirectory.setText(selectedDirectory.toString());
+    	String actualDirectory = selectedDirectory.toString() + "\\" + InvoiceManagerHelper.getInstance().getProfile().getProfileName();
+    	actualDirectory = actualDirectory + "\\" + InvoiceManagerHelper.getInstance().getContact().getContactAlias() + "\\";
+    	textAreaDirectory.setText(actualDirectory);
+    	savePath = new File(actualDirectory); 
     	
+    
+    
     }
     
     @FXML

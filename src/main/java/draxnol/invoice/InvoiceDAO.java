@@ -91,6 +91,7 @@ public class InvoiceDAO {
 				pstmt.execute();			
 				DatabaseConnection.dbDisconnect();
 				rowNumber += 1;
+				System.out.println("row number is + " + rowNumber );
 				System.out.println("SQL EXECUTRED");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

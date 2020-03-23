@@ -283,11 +283,11 @@ public class PrimaryController {
 	private void addNewInvoice() {
 		if (InvoiceManagerHelper.getInstance().getContact() != null) {
 			int invoiceCount = InvoiceManagerHelper.getInstance().getContact().getContactInvoiceCount();
-			System.out.println("invoice count = " + invoiceCount);
-			System.out.println("listview= " + invoicesListView);
-			
 			invoicesListView.getItems()
-					.add(new Invoice(invoiceCount, InvoiceManagerHelper.getInstance().getContact().getContactID(),dateFieldDate.getEditor().getText()));
+					.add(new Invoice(invoiceCount,
+							InvoiceManagerHelper.getInstance().getContact().getContactID(),
+							dateFieldDate.getEditor().getText(), textFieldBillingPayable.getText(), textFieldBillTo.getText(),
+							InvoiceManagerHelper.getInstance().getProfile().getProfileHeader()));
 			
 			InvoiceManagerHelper.getInstance().getContact().incrementInvoiceCount();
 		}
@@ -385,7 +385,7 @@ public class PrimaryController {
 			if(currentInvoice.invoiceStatus == InvoiceStatus.SAVED){
 				tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0, currentInvoice.getInvoiceID()));
 			}else {
-				tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0, currentInvoice.getTempID()));
+				tableViewInvoiceTable.getItems().add(new InvoiceRow("", "", 0, currentInvoice.getInvoiceID()));
 			}
 			
 		}

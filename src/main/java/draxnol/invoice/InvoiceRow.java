@@ -1,5 +1,6 @@
 package draxnol.invoice;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -43,7 +44,7 @@ public class InvoiceRow {
 		return invoiceID;
 	}
 
-	@XmlElement
+	@XmlAttribute
 	public int getRowID() {
 		return rowID;
 	}
