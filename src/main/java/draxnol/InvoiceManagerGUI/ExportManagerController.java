@@ -84,6 +84,7 @@ public class ExportManagerController {
 		for(Invoice invoice : exportList) {
 			try {
 				invoice.setProfileHeader(InvoiceManagerHelper.getInstance().getProfile().getProfileHeader());
+				invoice.setContactName(InvoiceManagerHelper.getInstance().getContact().getContactName());
 				XMLUtill.marshal(invoice, savePath);
 			} catch (JAXBException | IOException e) {
 				// TODO Auto-generated catch block
@@ -97,7 +98,8 @@ public class ExportManagerController {
     	ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
     	for(Invoice invoice : exportList) {
     		invoice.setProfileHeader(InvoiceManagerHelper.getInstance().getProfile().getProfileHeader());
-    		DocxUtill.exportTodocx(invoice, new File("C:\\Users\\robert\\Documents\\Invoicetemplate.docx"), savePath);
+    		invoice.setContactName(InvoiceManagerHelper.getInstance().getContact().getContactName());
+    		DocxUtill.exportTodocx(invoice, new File("C:\\Users\\robert\\Documents\\Invoicetemplate2.docx"), savePath);
     	}
     
     
