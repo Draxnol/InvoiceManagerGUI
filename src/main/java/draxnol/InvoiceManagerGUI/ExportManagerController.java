@@ -50,6 +50,9 @@ public class ExportManagerController {
     
     @FXML
     private void exportSelectedInvoices() {
+    	if(!checkIfDirExists(savePath) && savePath != null)
+    		createDir(savePath);	
+    	
     	if(savePath != null) {
     		if(radioBtnXml.isSelected()) {
     			exportToXmlFiles();
@@ -64,6 +67,18 @@ public class ExportManagerController {
     
     }
 
+    private void createDir(File dir) {
+    	dir.mkdirs();
+    }
+    
+    private Boolean checkIfDirExists(File dir) {
+    	if(dir.exists()) {
+    		return true;
+    	}else {
+    		return false;
+    	}
+    }
+    
     private void exportToXmlFiles() {
 		ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
 		for(Invoice invoice : exportList) {
