@@ -97,7 +97,7 @@ public class ExportManagerController {
     	ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
     	for(Invoice invoice : exportList) {
     		setInvoiceInformation(invoice);
-    		DocxUtill.exportTodocx(invoice, new File("C:\\Users\\robert\\Documents\\temp1.docx"), savePath);
+    		DocxUtill.exportTodocx(invoice, new File(ExportManagerController.class.getClassLoader().getResource("temp1.docx").getFile()), savePath);
     	}
     
     

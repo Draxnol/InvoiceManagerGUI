@@ -4,6 +4,7 @@ package draxnol.invoice;
 
 import static org.junit.Assert.*;
 
+import java.io.InputStream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,13 +28,7 @@ public class InvoiceTest {
 		instance.setDate("3/5/2020");
 		assertEquals("3/5/2020", instance.getInvoiceDateString());
 	}
-	@Test
-	public void testGetInvoiceDateObject() {
-		//TODO add real time handling
-		Invoice instance = new Invoice();
-		instance.setDate("3/5/2020");
-		//System.out.println(instance.getInvoiceDate());
-	}
+
 	
 	@Test
 	public void testSetInvoiceID() {
@@ -144,4 +139,6 @@ public class InvoiceTest {
 		assertEquals(750.0, instance.calcInvoiceTotal(), 0.1);
 	}
 	
+
+
 }
