@@ -31,7 +31,6 @@ public class Invoice {
 	@XmlTransient
 	public ObservableList<InvoiceRow> invoiceRows = FXCollections.observableArrayList();
 	private String profileHeader;
-	private String contactName;
 	
 	
 	public enum InvoiceStatus{
@@ -74,11 +73,6 @@ public class Invoice {
 		
 	}
 
-	@XmlElement
-	public String getContactName() {
-		return contactName;
-	}
-	
 	@XmlElement
 	public String getProfileHeader() {
 		return profileHeader;
@@ -207,11 +201,6 @@ public class Invoice {
 
 	public void setProfileHeader(String header) {
 		this.profileHeader = header;
-		
-	}
-
-	public void setContactName(String contactName) {
-		this.contactName = contactName;
 		
 	}
 
