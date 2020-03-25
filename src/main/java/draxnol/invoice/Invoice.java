@@ -206,6 +206,11 @@ public class Invoice {
 	public void setInvoiceTotal(Double total) {
 		invoiceTotal.set(total);
 	}
+	
+	public void setInvoiceTotal() {
+		invoiceTotal.set(calcInvoiceTotal());
+	}
+	
 	@XmlElement
 	public double getInvoiceTotal() {
 		return invoiceTotal.get();
@@ -258,7 +263,13 @@ public class Invoice {
 		
 	}
 
-	
+	public double calcInvoiceTotal() {
+		double tempInvoiceTotal = 0;
+		for(InvoiceRow row : this.invoiceRows) {
+			tempInvoiceTotal += row.getUnitCost();
+		}
+		return tempInvoiceTotal;
+	}
 	
 	
 }

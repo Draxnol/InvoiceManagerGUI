@@ -105,10 +105,12 @@ public class ExportManagerController {
     }
     
     private void setInvoiceInformation(Invoice invoice) {
+    	
     	invoice.setProfileHeader(InvoiceManagerHelper.getInstance().getProfile().getProfileHeader());
 		invoice.setContactName(InvoiceManagerHelper.getInstance().getContact().getContactName());
 		invoice.setInvoiceBillingAddress(InvoiceManagerHelper.getInstance().getContact().getContactBillingAddress());
 		invoice.setInvoicePayableAddress(InvoiceManagerHelper.getInstance().getProfile().getProfileAddress());
+		invoice.setInvoiceTotal();
     }
     
     @FXML

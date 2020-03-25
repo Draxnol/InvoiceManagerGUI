@@ -128,7 +128,7 @@ public class InvoiceTest {
 		assertEquals(5.0 ,instance.getInvoiceTotal(), 0.1);
 		
 	}
-	
+	@Test
 	public void testInvoiceTotalProperty() {
 		Invoice instance = new Invoice();
 		instance.invoiceTotalProperty().set(5.0);
@@ -136,4 +136,12 @@ public class InvoiceTest {
 		assertEquals(5.0, instance.invoiceTotalProperty().get(), 0.1);
 	}
 
+	@Test
+	public void testCalcInvoiceTotal() {
+		Invoice instance = new Invoice();
+		instance.getInvoiceRows().add(new InvoiceRow("","",500,1));
+		instance.getInvoiceRows().add(new InvoiceRow("","",250,1));
+		assertEquals(750.0, instance.calcInvoiceTotal(), 0.1);
+	}
+	
 }
