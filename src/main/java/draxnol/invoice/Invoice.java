@@ -1,5 +1,7 @@
 package draxnol.invoice;
 
+import java.util.ArrayList;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,7 +32,12 @@ public class Invoice {
 	
 	@XmlTransient
 	public ObservableList<InvoiceRow> invoiceRows = FXCollections.observableArrayList();
+	@XmlTransient
+	public ArrayList<AddressLine> payableAddressLines = new ArrayList<>();
+	@XmlTransient
+	public ArrayList<AddressLine> billingAddressLines = new ArrayList<>();
 	private String profileHeader;
+	private String contactName;
 	
 	
 	public enum InvoiceStatus{
@@ -43,15 +50,13 @@ public class Invoice {
 		init();
 	}
 	
-	public Invoice(int invoiceNumber, int contactID, String date, String payable, String billing, String profileHeader) {
+	public Invoice(int invoiceNumber, int contactID, String date) {
 		init();
 		this.invoiceStatus = InvoiceStatus.NOT_SAVED;
 		this.invoiceNumber.set(invoiceNumber);
 		this.contactID.set(contactID);
 		this.setDate(date);
-		this.payableAddress.set(payable);
-		this.billingAddress.set(billing);
-		this.profileHeader = profileHeader;
+
 	}
 	
 	private void init() {
@@ -73,6 +78,11 @@ public class Invoice {
 		
 	}
 
+	@XmlElement
+	public String getContactName() {
+		return contactName;
+	}
+	
 	@XmlElement
 	public String getProfileHeader() {
 		return profileHeader;
@@ -130,10 +140,41 @@ public class Invoice {
 	/* payableAddress */
 	public void setInvoicePayableAddress(String address) {
 		payableAddress.set(address);
+		generateAddressLines(getInvoicePayableAddressAsList(), payableAddressLines);
+		
 	}
-	@XmlElement
+	
 	public String getInvoicePayableAddress() {
 		return payableAddress.get();
+	}
+	
+	public void generateAddressLines(String[] splitAddress, ArrayList<AddressLine> addressLines) {
+		int count = 0;
+		
+		if (addressLines.isEmpty()) {
+			for (String i : splitAddress) {
+				addressLines.add(new AddressLine(i, count));
+				count += 1;
+			}
+			
+		}else {
+			System.out.println("address already set");
+		}
+	} 
+	
+	public String[] getInvoicePayableAddressAsList() {
+		return payableAddress.get().split("\n");
+	}
+	
+	public String[] getInvoiceBillingAdddressAsList() {
+		return billingAddress.get().split("\n");
+	}
+	
+	@XmlElementWrapper(name="PayableAddressLines")
+	@XmlElement(name="Line")
+	public ArrayList<AddressLine> getInvoicePayableAddressLines() {
+		return payableAddressLines;
+	
 	}
 	
 	public SimpleStringProperty payableAddressProperty() {
@@ -143,14 +184,22 @@ public class Invoice {
 	/* Billing address */
 	public void setInvoiceBillingAddress(String address) {
 		billingAddress.set(address);
+		generateAddressLines(getInvoiceBillingAdddressAsList(), billingAddressLines );
+		
 	}
-	@XmlElement
+
 	public String getInvoiceBillingAddress() {
 		return billingAddress.get();
 	}
 	
 	public SimpleStringProperty billingAddressProperty() {
 		return billingAddress;
+	}
+	
+	@XmlElementWrapper(name="BillingAddressLines")
+	@XmlElement(name="Line")
+	public ArrayList<AddressLine> getInvoiceBillingAddressLines(){
+		return billingAddressLines;
 	}
 	/*invoice total*/
 	
@@ -204,6 +253,12 @@ public class Invoice {
 		
 	}
 
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
+		
+	}
 
+	
+	
+	
 }
-

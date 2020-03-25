@@ -83,7 +83,7 @@ public class ExportManagerController {
 		ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
 		for(Invoice invoice : exportList) {
 			try {
-				invoice.setProfileHeader(InvoiceManagerHelper.getInstance().getProfile().getProfileHeader());
+				setInvoiceInformation(invoice);
 				XMLUtill.marshal(invoice, savePath);
 			} catch (JAXBException | IOException e) {
 				// TODO Auto-generated catch block
@@ -96,14 +96,20 @@ public class ExportManagerController {
     private void exportTodocxFiles() {
     	ObservableList<Invoice> exportList = exportListView.getSelectionModel().getSelectedItems();
     	for(Invoice invoice : exportList) {
-    		invoice.setProfileHeader(InvoiceManagerHelper.getInstance().getProfile().getProfileHeader());
-    		DocxUtill.exportTodocx(invoice, new File("C:\\Users\\robert\\Documents\\Invoicetemplate.docx"), savePath);
+    		setInvoiceInformation(invoice);
+    		DocxUtill.exportTodocx(invoice, new File("C:\\Users\\robert\\Documents\\temp1.docx"), savePath);
     	}
     
     
     
     }
     
+    private void setInvoiceInformation(Invoice invoice) {
+    	invoice.setProfileHeader(InvoiceManagerHelper.getInstance().getProfile().getProfileHeader());
+		invoice.setContactName(InvoiceManagerHelper.getInstance().getContact().getContactName());
+		invoice.setInvoiceBillingAddress(InvoiceManagerHelper.getInstance().getContact().getContactBillingAddress());
+		invoice.setInvoicePayableAddress(InvoiceManagerHelper.getInstance().getProfile().getProfileAddress());
+    }
     
     @FXML
     private void openDirBrowser() {
@@ -148,5 +154,3 @@ public class ExportManagerController {
 	}
 
 }
-
-

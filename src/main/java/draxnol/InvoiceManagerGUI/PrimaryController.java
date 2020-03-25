@@ -286,8 +286,7 @@ public class PrimaryController {
 			invoicesListView.getItems()
 					.add(new Invoice(invoiceCount,
 							InvoiceManagerHelper.getInstance().getContact().getContactID(),
-							dateFieldDate.getEditor().getText(), textFieldBillingPayable.getText(), textFieldBillTo.getText(),
-							InvoiceManagerHelper.getInstance().getProfile().getProfileHeader()));
+							dateFieldDate.getEditor().getText()));
 			
 			InvoiceManagerHelper.getInstance().getContact().incrementInvoiceCount();
 		}
