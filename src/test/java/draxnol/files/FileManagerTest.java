@@ -19,12 +19,7 @@ public class FileManagerTest {
 		FileManager instance = new FileManager();
 		assertFalse(instance.checkConfigFileExists());
 	}
-	@Test
-	public void checkIfDbExistsTest() {
-		FileManager instance =new FileManager();
-		assertFalse(instance.checkDBfileExists());
-		
-	}
+
 	
 	@Test
 	public void createDBFileTest() {
