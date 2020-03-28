@@ -11,13 +11,11 @@ import javafx.collections.ObservableList;
 public class ProfileDAO {
 
 	public static ObservableList<Profile> loadAllProfiles() throws SQLException{
-		System.out.println("Loading profiles");
 		String sql = "SELECT * FROM profiles;";
 		
 		try {
 			ResultSet rs = DatabaseConnection.dbQuery(sql);
 			ObservableList<Profile> profileList = getProfileObList(rs);
-			System.out.println(profileList);
 			DatabaseConnection.dbDisconnect();
 			rs.close();
 		
@@ -33,7 +31,6 @@ public class ProfileDAO {
 	private static ObservableList<Profile> getProfileObList(ResultSet rs) {
 		ObservableList<Profile> profiles = FXCollections.observableArrayList();
 		try {
-			System.out.println("read db");
 			while(rs.next()) {
 				Profile profile = new Profile();
 				profile.setProfileID(rs.getInt("profileID"));
@@ -56,7 +53,6 @@ public class ProfileDAO {
 	
 	public static void insertNewProfile(Profile profile) {
 		String sql = "INSERT INTO profiles(profileName, profileAddress, profileHeader, profileInvoiceCount) VALUES (?,?,?,?)";		
-		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
 			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
@@ -67,7 +63,6 @@ public class ProfileDAO {
 			pstmt.execute();
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -86,7 +81,6 @@ public class ProfileDAO {
 			pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

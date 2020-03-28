@@ -12,7 +12,6 @@ import javafx.collections.ObservableList;
 
 public class ContactDAO {
 	public static ObservableList<Contact> loadAllContactsDB() throws SQLException {
-		System.out.println("Loading contacts....");
 		String sql = "SELECT * FROM contacts where profileID = ?";
 		try {
 			
@@ -74,17 +73,14 @@ public class ContactDAO {
 			pstmt.execute();
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 
 	}
 
 	public static void updateContact(Contact contact) {
-		// TODO Use prepared statements instead.
-
 		String sql = "UPDATE contacts SET  contactInvoiceCount= ?, contactName= ? , contactAlias= ?, contactBillingAddress= ?, contactBusinessNumber= ? , contactPhoneNumber= ?,"
 				+ " contactEmailAddress= ? WHERE contactID= ?";
-		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
 			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
@@ -99,7 +95,6 @@ public class ContactDAO {
 			pstmt.execute();
 			DatabaseConnection.dbDisconnect();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

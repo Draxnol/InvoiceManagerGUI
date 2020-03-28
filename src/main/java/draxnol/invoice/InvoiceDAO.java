@@ -48,7 +48,6 @@ public class InvoiceDAO {
 				invoices.add(invoice);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -59,7 +58,6 @@ public class InvoiceDAO {
 	public static void saveRows(ObservableList<InvoiceRow> invoiceRows, int invoiceID) {		
 		int rowNumber = invoiceRows.size() + 1;
 		String sql;
-		System.out.println("invoiceID is " + invoiceID);
 		
 		
 		for(InvoiceRow row : invoiceRows) {
@@ -91,8 +89,6 @@ public class InvoiceDAO {
 				pstmt.execute();			
 				DatabaseConnection.dbDisconnect();
 				rowNumber += 1;
-				System.out.println("row number is + " + rowNumber );
-				System.out.println("SQL EXECUTRED");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -106,8 +102,6 @@ public class InvoiceDAO {
 		String sql = "UPDATE invoices "
 				+ "Set payableAddress = ?, billingAddress = ?," 
 				+ "invoiceDateString = ? WHERE invoiceID = ?";
-				
-		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
 			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
@@ -129,7 +123,6 @@ public class InvoiceDAO {
 				"(contactID, invoiceNumber, payableAddress, billingAddress, invoiceDateString, invoiceTotal)\r\n"
 				+ "VALUES(?,?,?,?,?,?)" ; 
 		String sql2  = "SELECT last_insert_rowid()";
-		System.out.println(sql);
 		try {
 			DatabaseConnection.dbConnect();
 			PreparedStatement pstmt = DatabaseConnection.connection.prepareStatement(sql);
@@ -137,13 +130,11 @@ public class InvoiceDAO {
 			pstmt.setInt(2, selectedInvoice.getInvoiceNumber());
 			pstmt.setString(3, selectedInvoice.getInvoicePayableAddress());
 			pstmt.setString(4, selectedInvoice.getInvoiceBillingAddress());
-			System.out.println(selectedInvoice.getInvoiceDateString());
 			pstmt.setString(5, selectedInvoice.getInvoiceDateString());
 			pstmt.setDouble(6, selectedInvoice.getInvoiceTotal());
 			pstmt.execute();
 			pstmt = DatabaseConnection.connection.prepareStatement(sql2);
 			int invoiceID = pstmt.getGeneratedKeys().getInt(1);
-			System.out.println(invoiceID);
 			return invoiceID;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -203,7 +194,7 @@ public class InvoiceDAO {
 				invoiceRows.add(invoiceRow);
 			}
 		}catch(SQLException e){
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		
 		

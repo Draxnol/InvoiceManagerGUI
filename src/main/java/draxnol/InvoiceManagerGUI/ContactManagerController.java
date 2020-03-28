@@ -57,10 +57,6 @@ public class ContactManagerController {
 
 	@FXML
 	private void initialize() throws SQLException {
-
-		System.out.println("Initialize method");
-		System.out.println("Current profile is " + InvoiceManagerHelper.getInstance().getProfile());
-		System.out.println(ContactDAO.loadAllContactsDB());
 		contactListView.setItems(ContactDAO.loadAllContactsDB());
 		contactListView.setCellFactory(param -> new ListCell<Contact>() {
 			@Override
@@ -76,7 +72,7 @@ public class ContactManagerController {
 
 		});
 		contactListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-			System.out.println("Contact Selection Changed.");
+
 			try {
 				int selectedIndex = contactListView.getSelectionModel().getSelectedIndex();
 				Contact selectedContact = contactListView.getItems().get(selectedIndex);
@@ -89,7 +85,7 @@ public class ContactManagerController {
 				textAreaBillingAddress.setText(selectedContact.getContactBillingAddress());
 
 			} catch (IndexOutOfBoundsException e) {
-				System.out.println(e);
+				e.printStackTrace();;
 			}
 
 		});
@@ -166,19 +162,16 @@ public class ContactManagerController {
 					selectedContact.status = ContactStatus.CREATED;
 					ContactDAO.insertNewContact(selectedContact);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else {
 				ContactDAO.updateContact(selectedContact);
 			}
 
-			System.out.println("Updating db");
-
 			try {
 				contactListView.setItems(ContactDAO.loadAllContactsDB());
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
 		} catch (NullPointerException e) {

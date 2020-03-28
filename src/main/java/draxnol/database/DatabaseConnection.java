@@ -15,7 +15,6 @@ public class DatabaseConnection {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -26,7 +25,7 @@ public class DatabaseConnection {
 		} catch (SQLException e) {
 			// if the error message is "out of memory",
 			// it probably means no database file is found
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 
 		}
 
@@ -48,7 +47,6 @@ public class DatabaseConnection {
 
 		try {
 			dbConnect();
-			System.out.println("Query Statement = " + statement + ".");
 			stmt = connection.createStatement();
 			resultSet = stmt.executeQuery(statement);
 

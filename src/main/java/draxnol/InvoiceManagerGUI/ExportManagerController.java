@@ -86,7 +86,7 @@ public class ExportManagerController {
 				setInvoiceInformation(invoice);
 				XMLUtill.marshal(invoice, savePath);
 			} catch (JAXBException | IOException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
 		}
@@ -147,7 +147,7 @@ public class ExportManagerController {
     
     }
     
-    public ExportManagerController() {}
+
     
     
 

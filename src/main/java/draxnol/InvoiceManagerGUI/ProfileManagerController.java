@@ -46,11 +46,7 @@ public class ProfileManagerController {
 	private Button btnDelete;
 
 	public void initialize() throws SQLException {
-		System.out.println("Initialize method");
-		System.out.println(ProfileDAO.loadAllProfiles());
-
 		listViewProfile.setItems(ProfileDAO.loadAllProfiles());
-
 		listViewProfile.setCellFactory(param -> new ListCell<Profile>() {
 			@Override
 			protected void updateItem(Profile profile, boolean empty) {
@@ -65,16 +61,14 @@ public class ProfileManagerController {
 		});
 
 		listViewProfile.getSelectionModel().selectedItemProperty().addListener((obs, oldval, newval) -> {
-			System.out.println("Profile changed");
-			try {
 
+			try {
 				Profile selectedProfile = getSelectedProfile();
-				System.out.println(selectedProfile.getProfileHeader());
 				textFieldProfileAddress.setText(selectedProfile.getProfileAddress());
 				textFieldProfileHeader.setText(selectedProfile.getProfileHeader());
 				textFieldProfileName.setText(selectedProfile.getProfileName());
 			} catch (IndexOutOfBoundsException e) {
-				System.out.println(e);
+				e.printStackTrace();
 			} catch (NullPointerException e) {
 
 			}
@@ -122,11 +116,9 @@ public class ProfileManagerController {
 			try {
 				listViewProfile.setItems(ProfileDAO.loadAllProfiles());
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
 			showNoProfileSelectedAlert();
 		}
 
@@ -137,7 +129,7 @@ public class ProfileManagerController {
 		try {
 			InvoiceManagerHelper.getInstance().setProfile(getSelectedProfile());
 			InvoiceManagerHelper.getInstance().updateProfileLabel();
-			// InvoiceManagerHelper.getInstance().setContact(null);
+
 			Stage stage = (Stage) btnSelect.getScene().getWindow();
 			stage.close();
 		} catch (NullPointerException e) {

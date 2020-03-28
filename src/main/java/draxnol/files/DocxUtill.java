@@ -28,7 +28,6 @@ public class DocxUtill {
 			Docx4J.save(wordMLPackage, new File(outString), Docx4J.FLAG_NONE);
 		
 		} catch (Docx4JException | JAXBException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

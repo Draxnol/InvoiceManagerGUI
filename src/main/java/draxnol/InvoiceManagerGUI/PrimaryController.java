@@ -191,14 +191,13 @@ public class PrimaryController {
 				tableViewInvoiceTable.setItems(null);
 				dateFieldDate.getEditor().setText(currentInvoice.getInvoiceDateString());
 				textFieldInvoiceNumber.setText(String.valueOf(currentInvoice.getInvoiceNumber()));
-				System.out.println("Current invoice id = " + currentInvoice.getInvoiceID());
+				
 				currentInvoice.setInvoiceRow(InvoiceDAO.loadInvoiceRows(currentInvoice.getInvoiceID()));
 				tableViewInvoiceTable.setItems(currentInvoice.getInvoiceRows());
 				
 			} catch (IndexOutOfBoundsException | SQLException | NullPointerException e) {
 				
-				//TODO EXECPTION HANDLING
-				System.out.println(e);
+				e.printStackTrace();
 			}
 		});
 
@@ -236,12 +235,11 @@ public class PrimaryController {
 	}
 
 	private void loadSelectedContactInvoices() {
-		System.out.println("Contact changed");
 		int contactID = InvoiceManagerHelper.getInstance().getContact().getContactID();
 		try {
 			invoicesListView.setItems(InvoiceDAO.loadSelectedContactInvoices(contactID));
 		} catch (SQLException e) {
-			
+			e.printStackTrace();
 		}
 
 	}
@@ -300,12 +298,11 @@ public class PrimaryController {
 	
 			InvoiceManagerHelper.getInstance().getContact().decrementInvoiceCount();
 			Invoice selectedInvoice = invoicesListView.getItems().get(currentSelectionIndex);
-			System.out.println(selectedInvoice.getInvoiceSummary());
 			InvoiceDAO.deleteInvoice(selectedInvoice);
 			ContactDAO.updateContactInvoiceCount(InvoiceManagerHelper.getInstance().getContact());
 			
 		} catch (IndexOutOfBoundsException e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}finally {
 			invoicesListView.getItems().remove(currentSelectionIndex);
 		}
@@ -327,12 +324,10 @@ public class PrimaryController {
 			selectedInvoice.setInvoicePayableAddress(textFieldBillingPayable.getText());
 
 			if (selectedInvoice.getInvoiceStatus().equals(InvoiceStatus.SAVED)) {
-				System.out.println("Invoice Status is saved");
 				InvoiceDAO.updateInvoice(selectedInvoice);
 				InvoiceDAO.saveRows(selectedInvoice.getInvoiceRows(), selectedInvoice.getInvoiceID());
 
 			} else if (selectedInvoice.getInvoiceStatus().equals(InvoiceStatus.NOT_SAVED)) {
-				System.out.println("Invoice Status is not saved");
 				int invoiceID = InvoiceDAO.addNewInvoice(selectedInvoice);
 				ContactDAO.updateContactInvoiceCount(InvoiceManagerHelper.getInstance().getContact());
 				InvoiceDAO.saveRows(selectedInvoice.getInvoiceRows(), invoiceID);
@@ -340,10 +335,8 @@ public class PrimaryController {
 			
 			}
 
-			
-
 		} catch (IndexOutOfBoundsException e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 
 	}
@@ -352,7 +345,6 @@ public class PrimaryController {
 	@FXML
 	private void openExportManager() {
 		if(InvoiceManagerHelper.getInstance().getContact()!=null) {
-			System.out.println(invoicesListView.getItems());
 			FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ExportManager.fxml"));	
 			Stage stage = new Stage();
 			try {
@@ -361,7 +353,6 @@ public class PrimaryController {
 				exportManager.initData(invoicesListView.getItems());
 				stage.show();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -400,13 +391,12 @@ public class PrimaryController {
 				tableViewInvoiceTable.getItems().remove(selectedIndex);
 				InvoiceDAO.deleteRow(rowID);
 			} catch (IndexOutOfBoundsException e) {
-				System.out.println(e + "throw a selection error at somepoint");
+				e.printStackTrace();
 			}
 		}
 	}
 
 	private Object formatSystem() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -424,7 +414,6 @@ public class PrimaryController {
 			profileStage.show();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
